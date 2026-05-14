@@ -39,3 +39,5 @@ As a group member, I want to view team progress, so that I know what has been co
 - Assignment List component added
 - Study Resources component added
 - Team Progress component added
+
+## Sprint 1 deployment prepared on vercel
