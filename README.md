@@ -1,73 +1,41 @@
-# React + TypeScript + Vite
+# StudyTrack
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Team
 
-Currently, two official plugins are available:
+**Team Name:** Stack Sisters
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Team Members:**
 
-## React Compiler
+- Dilraj
+- Arshpreet
+- Jaspreet
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Project General Description
 
-## Expanding the ESLint configuration
+StudyTrack is a student planning app. The purpose of the app is to help students organize assignments, study resources, and group project progress in one place.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+We chose this idea because students usually have many due dates, notes, and group tasks to manage. StudyTrack gives users a simple place to keep track of school work.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## High-Level User Stories
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### User Story 1
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+As a student, I want to view my assignments, so that I can keep track of what work I still need to finish.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### User Story 2
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+As a student, I want to save study resources, so that I can easily find helpful notes and links later.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### User Story 3
+
+As a group member, I want to view team progress, so that I know what has been completed and what still needs work.
+
+## Sprint 1 Features
+
+- React TypeScript project created with Vite
+- Main app layout created
+- Header with project title added
+- Footer with team member names added
+- Assignment List component added
+- Study Resources component added
+- Team Progress component added
