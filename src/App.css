@@ -9,35 +9,97 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.app {
-  width: min(1000px, 90%);
-  margin: 0 auto;
-  padding: 30px 0;
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
-.app-header {
+.page-card {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.page-card h2 {
+  margin-top: 0;
+}
+
+.page-description {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.shared-box {
+  background-color: #eef6ff;
+  border: 1px solid #bfd7f0;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 18px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.form-row input {
+  flex: 1;
+  border: 1px solid #9ca3af;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.preview-text {
+  background-color: #f9fafb;
+  border-left: 4px solid #111827;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
   background-color: #111827;
   color: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  margin-bottom: 25px;
+  cursor: pointer;
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 2.3rem;
+button:hover {
+  background-color: #374151;
 }
 
-.app-header p {
-  margin-bottom: 0;
-  font-size: 1rem;
-  line-height: 1.5;
+.remove-button {
+  background-color: #6b7280;
 }
 
-.app-footer {
-  border-top: 1px solid #d1d5db;
-  padding: 18px;
-  text-align: center;
-  color: #374151;
+.remove-button:hover {
+  background-color: #4b5563;
+}
+
+.item-list {
+  list-style: none;
+  padding: 0;
+}
+
+.item-list li {
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
 }
