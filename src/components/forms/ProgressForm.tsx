@@ -1,37 +1,112 @@
-import { createElement, type ChangeEvent } from "react";
+import {
+  createElement,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
+
+type ProgressStatus = "Planned" | "In Progress" | "Blocked" | "Done";
 
 type ProgressFormProps = {
-  newProgress: string;
-  setNewProgress: (value: string) => void;
-  addProgress: () => void;
+  draftTask: string;
+  setDraftTask: (value: string) => void;
+  draftOwner: string;
+  setDraftOwner: (value: string) => void;
+  draftStatus: ProgressStatus;
+  setDraftStatus: (value: ProgressStatus) => void;
+  draftPercent: number;
+  setDraftPercent: (value: number) => void;
+  addProgressItem: () => void;
 };
 
 function ProgressForm({
-  newProgress,
-  setNewProgress,
-  addProgress,
+  draftTask,
+  setDraftTask,
+  draftOwner,
+  setDraftOwner,
+  draftStatus,
+  setDraftStatus,
+  draftPercent,
+  setDraftPercent,
+  addProgressItem,
 }: ProgressFormProps) {
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    setNewProgress(event.currentTarget.value);
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    addProgressItem();
   }
 
   return createElement(
-    "div",
-    { className: "form-row" },
-    createElement("input", {
-      type: "text",
-      value: newProgress,
-      onChange: handleChange,
-      placeholder: "Enter team progress task",
-      "aria-label": "Team progress task",
-    }),
+    "form",
+    { className: "progress-form-panel", onSubmit: handleSubmit },
+    createElement("h3", null, "Add Sprint Progress Item"),
+
+    createElement(
+      "div",
+      { className: "progress-form-grid" },
+
+      createElement(
+        "label",
+        null,
+        "Task name",
+        createElement("input", {
+          type: "text",
+          value: draftTask,
+          onChange: (event: ChangeEvent<HTMLInputElement>) =>
+            setDraftTask(event.currentTarget.value),
+          placeholder: "Example: Finish progress page",
+        })
+      ),
+
+      createElement(
+        "label",
+        null,
+        "Owner",
+        createElement("input", {
+          type: "text",
+          value: draftOwner,
+          onChange: (event: ChangeEvent<HTMLInputElement>) =>
+            setDraftOwner(event.currentTarget.value),
+          placeholder: "Example: Jaspreet",
+        })
+      ),
+
+      createElement(
+        "label",
+        null,
+        "Status",
+        createElement(
+          "select",
+          {
+            value: draftStatus,
+            onChange: (event: ChangeEvent<HTMLSelectElement>) =>
+              setDraftStatus(event.currentTarget.value as ProgressStatus),
+          },
+          createElement("option", { value: "Planned" }, "Planned"),
+          createElement("option", { value: "In Progress" }, "In Progress"),
+          createElement("option", { value: "Blocked" }, "Blocked"),
+          createElement("option", { value: "Done" }, "Done")
+        )
+      ),
+
+      createElement(
+        "label",
+        null,
+        `Progress: ${draftPercent}%`,
+        createElement("input", {
+          type: "range",
+          min: 0,
+          max: 100,
+          step: 10,
+          value: draftPercent,
+          onChange: (event: ChangeEvent<HTMLInputElement>) =>
+            setDraftPercent(Number(event.currentTarget.value)),
+        })
+      )
+    ),
+
     createElement(
       "button",
-      {
-        type: "button",
-        onClick: addProgress,
-      },
-      "Add Progress"
+      { type: "submit", className: "primary-action" },
+      "Add Progress Item"
     )
   );
 }
