@@ -16,6 +16,27 @@ textarea {
   font: inherit;
 }
 
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background-color: #111827;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #374151;
+}
+
+.remove-button {
+  background-color: #6b7280;
+}
+
+.remove-button:hover {
+  background-color: #4b5563;
+}
+
 .page-card {
   background-color: #ffffff;
   border: 1px solid #d1d5db;
@@ -66,27 +87,6 @@ textarea {
   margin-bottom: 16px;
 }
 
-button {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  background-color: #111827;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #374151;
-}
-
-.remove-button {
-  background-color: #6b7280;
-}
-
-.remove-button:hover {
-  background-color: #4b5563;
-}
-
 .item-list {
   list-style: none;
   padding: 0;
@@ -103,6 +103,9 @@ button:hover {
   gap: 12px;
   align-items: center;
 }
+
+/* Arshpreet Assignments Page */
+
 .assignment-page {
   border-top: 6px solid #111827;
 }
@@ -215,13 +218,151 @@ button:hover {
   align-items: center;
 }
 
-@media (max-width: 700px) {
+/* Jaspreet Progress Page */
+
+.progress-page {
+  border-top: 6px solid #4c1d95;
+}
+
+.progress-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.progress-dashboard article {
+  background-color: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.progress-dashboard strong {
+  display: block;
+  font-size: 1.7rem;
+  color: #4c1d95;
+}
+
+.progress-dashboard span {
+  color: #4b5563;
+}
+
+.progress-form-panel {
+  background-color: #ffffff;
+  border: 1px solid #ddd6fe;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.progress-form-panel h3 {
+  margin-top: 0;
+}
+
+.progress-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.progress-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.progress-form-grid input,
+.progress-form-grid select {
+  border: 1px solid #9ca3af;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.progress-preview {
+  background-color: #faf5ff;
+  border-left: 5px solid #7c3aed;
+  padding: 14px;
+  margin: 18px 0;
+}
+
+.progress-preview h3 {
+  margin-top: 0;
+}
+
+.progress-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.progress-filter label {
+  font-weight: 700;
+}
+
+.progress-filter select {
+  border: 1px solid #9ca3af;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.progress-card-list {
+  list-style: none;
+  padding: 0;
+}
+
+.progress-task-card {
+  background-color: #ffffff;
+  border: 1px solid #ddd6fe;
+  border-left: 6px solid #7c3aed;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.progress-task-card h3 {
+  margin: 0 0 8px;
+}
+
+.progress-task-main {
+  flex: 1;
+}
+
+.progress-bar {
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  height: 12px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  background-color: #7c3aed;
+  height: 100%;
+}
+
+.progress-task-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 800px) {
   .assignment-dashboard,
-  .assignment-form-grid {
+  .assignment-form-grid,
+  .progress-dashboard,
+  .progress-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .assignment-card {
+  .assignment-card,
+  .progress-task-card {
     flex-direction: column;
   }
 }
