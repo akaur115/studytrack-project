@@ -16,6 +16,27 @@ textarea {
   font: inherit;
 }
 
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background-color: #111827;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #374151;
+}
+
+.remove-button {
+  background-color: #6b7280;
+}
+
+.remove-button:hover {
+  background-color: #4b5563;
+}
+
 .page-card {
   background-color: #ffffff;
   border: 1px solid #d1d5db;
@@ -66,27 +87,6 @@ textarea {
   margin-bottom: 16px;
 }
 
-button {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  background-color: #111827;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #374151;
-}
-
-.remove-button {
-  background-color: #6b7280;
-}
-
-.remove-button:hover {
-  background-color: #4b5563;
-}
-
 .item-list {
   list-style: none;
   padding: 0;
@@ -103,6 +103,122 @@ button:hover {
   gap: 12px;
   align-items: center;
 }
+
+/* Arshpreet Assignments Page */
+
+.assignment-page {
+  border-top: 6px solid #111827;
+}
+
+.assignment-dashboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.assignment-dashboard article {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.assignment-dashboard strong {
+  display: block;
+  font-size: 1.8rem;
+  color: #111827;
+}
+
+.assignment-dashboard span {
+  color: #4b5563;
+}
+
+.assignment-form-panel {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.assignment-form-panel h3 {
+  margin-top: 0;
+}
+
+.assignment-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.assignment-form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.assignment-form-grid input,
+.assignment-form-grid select {
+  border: 1px solid #9ca3af;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.primary-action {
+  width: 100%;
+}
+
+.assignment-preview {
+  background-color: #fefce8;
+  border-left: 5px solid #ca8a04;
+  padding: 14px;
+  margin: 18px 0;
+}
+
+.assignment-preview h3 {
+  margin-top: 0;
+}
+
+.assignment-card-list {
+  list-style: none;
+  padding: 0;
+}
+
+.assignment-card {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-left: 6px solid #111827;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.assignment-card h3 {
+  margin: 0 0 8px;
+}
+
+.assignment-card p {
+  margin: 0 0 6px;
+}
+
+.assignment-card-complete {
+  border-left-color: #16a34a;
+  background-color: #f0fdf4;
+}
+
+.assignment-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Jaspreet Progress Page */
 
 .progress-page {
   border-top: 6px solid #4c1d95;
@@ -238,11 +354,14 @@ button:hover {
 }
 
 @media (max-width: 800px) {
+  .assignment-dashboard,
+  .assignment-form-grid,
   .progress-dashboard,
   .progress-form-grid {
     grid-template-columns: 1fr;
   }
 
+  .assignment-card,
   .progress-task-card {
     flex-direction: column;
   }
