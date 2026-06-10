@@ -1,7 +1,6 @@
 import {
   createElement,
   useState,
-  type ChangeEvent,
   type Dispatch,
   type SetStateAction,
 } from "react";
@@ -33,7 +32,13 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
     toggleAssignment,
   } = useAssignments();
 
-
+  /*
+    Sprint 3 architecture use:
+    This component uses the useAssignments custom hook instead of keeping
+    assignment logic directly inside the page. The hook connects the page
+    to the assignment service and assignment repository. This keeps the page
+    focused on displaying the Assignments UI.
+  */
 
   function handleAddAssignment() {
     addAssignment(draftTitle, draftCourse, draftPriority, draftDueDate);
@@ -138,7 +143,7 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
         "select",
         {
           value: priorityFilter,
-          onChange: (event: ChangeEvent<HTMLSelectElement>) =>
+          onChange: (event: React.ChangeEvent<HTMLSelectElement>) =>
             setPriorityFilter(
               event.currentTarget.value as AssignmentPriority | "All"
             ),
