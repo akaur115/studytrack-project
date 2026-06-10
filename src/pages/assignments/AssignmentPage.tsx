@@ -1,30 +1,78 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import {
+  createElement,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import AssignmentForm from "../../components/forms/AssignmentForm";
 
-type AssignmentsPageProps = {
+type AssignmentPriority = "Low" | "Medium" | "High";
+
+type Assignment = {
+  id: number;
+  title: string;
+  course: string;
+  priority: AssignmentPriority;
+  dueDate: string;
+  completed: boolean;
+};
+
+type AssignmentPageProps = {
   teamPoints: number;
   setTeamPoints: Dispatch<SetStateAction<number>>;
 };
 
-function AssignmentsPage({ teamPoints, setTeamPoints }: AssignmentsPageProps) {
-  const [newAssignment, setNewAssignment] = useState("");
-  const [assignments, setAssignments] = useState([
-    { id: 1, title: "Finish routing setup" },
-    { id: 2, title: "Review Sprint 2 Kanban items" },
+function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
+  const [draftTitle, setDraftTitle] = useState("");
+  const [draftCourse, setDraftCourse] = useState("");
+  const [draftPriority, setDraftPriority] =
+    useState<AssignmentPriority>("Medium");
+  const [draftDueDate, setDraftDueDate] = useState("");
+
+  const [assignments, setAssignments] = useState<Assignment[]>([
+    {
+      id: 1,
+      title: "Finish Sprint 2 routing",
+      course: "Full Stack Development",
+      priority: "High",
+      dueDate: "2026-05-20",
+      completed: false,
+    },
+    {
+      id: 2,
+      title: "Update Kanban board",
+      course: "Project Work",
+      priority: "Medium",
+      dueDate: "2026-05-21",
+      completed: true,
+    },
   ]);
 
+  const completedCount = assignments.filter(
+    (assignment) => assignment.completed
+  ).length;
+
+  const remainingCount = assignments.length - completedCount;
+
   function addAssignment() {
-    if (newAssignment.trim() === "") {
+    if (draftTitle.trim() === "" || draftCourse.trim() === "") {
       return;
     }
 
-    const nextAssignment = {
+    const nextAssignment: Assignment = {
       id: Date.now(),
-      title: newAssignment,
+      title: draftTitle,
+      course: draftCourse,
+      priority: draftPriority,
+      dueDate: draftDueDate,
+      completed: false,
     };
 
     setAssignments([...assignments, nextAssignment]);
-    setNewAssignment("");
+    setDraftTitle("");
+    setDraftCourse("");
+    setDraftPriority("Medium");
+    setDraftDueDate("");
     setTeamPoints((points) => points + 1);
   }
 
@@ -33,48 +81,150 @@ function AssignmentsPage({ teamPoints, setTeamPoints }: AssignmentsPageProps) {
     setTeamPoints((points) => points + 1);
   }
 
-  return (
-    <section className="page-card">
-      <h2>Assignments</h2>
+  function toggleAssignment(id: number) {
+    setAssignments(
+      assignments.map((assignment) =>
+        assignment.id === id
+          ? { ...assignment, completed: !assignment.completed }
+          : assignment
+      )
+    );
 
-      <p className="page-description">
-        This page lets students add and remove assignment tasks for StudyTrack.
-      </p>
+    setTeamPoints((points) => points + 1);
+  }
 
-      <div className="shared-box">
-        <strong>Team activity points:</strong>
-        <span>{teamPoints}</span>
-        <button type="button" onClick={() => setTeamPoints((points) => points + 1)}>
-          Add Point
-        </button>
-      </div>
+  return createElement(
+    "section",
+    { className: "page-card assignment-page" },
+    createElement("h2", null, "Assignment Planner"),
+    createElement(
+      "p",
+      { className: "page-description" },
+      "This page helps students plan assignments by course, priority, and due date."
+    ),
 
-      <AssignmentForm
-        newAssignment={newAssignment}
-        setNewAssignment={setNewAssignment}
-        addAssignment={addAssignment}
-      />
+    createElement(
+      "div",
+      { className: "assignment-dashboard" },
+      createElement(
+        "article",
+        null,
+        createElement("strong", null, assignments.length),
+        createElement("span", null, "Total assignments")
+      ),
+      createElement(
+        "article",
+        null,
+        createElement("strong", null, remainingCount),
+        createElement("span", null, "Still remaining")
+      ),
+      createElement(
+        "article",
+        null,
+        createElement("strong", null, completedCount),
+        createElement("span", null, "Completed")
+      )
+    ),
 
-      <p className="preview-text">
-        Draft assignment: {newAssignment || "Nothing typed yet"}
-      </p>
+    createElement(
+      "div",
+      { className: "shared-box" },
+      createElement("strong", null, "Team activity points:"),
+      createElement("span", null, teamPoints),
+      createElement(
+        "button",
+        {
+          type: "button",
+          onClick: () => setTeamPoints((points) => points + 1),
+        },
+        "Add Point"
+      )
+    ),
 
-      <ul className="item-list">
-        {assignments.map((assignment) => (
-          <li key={assignment.id}>
-            <span>{assignment.title}</span>
-            <button
-              type="button"
-              className="remove-button"
-              onClick={() => removeAssignment(assignment.id)}
-            >
-              Remove
-            </button>
-          </li>
-        ))}
-      </ul>
-    </section>
+    createElement(AssignmentForm, {
+      draftTitle,
+      setDraftTitle,
+      draftCourse,
+      setDraftCourse,
+      draftPriority,
+      setDraftPriority,
+      draftDueDate,
+      setDraftDueDate,
+      addAssignment,
+    }),
+
+    createElement(
+      "div",
+      { className: "assignment-preview" },
+      createElement("h3", null, "Live Preview"),
+      createElement(
+        "p",
+        null,
+        draftTitle || "No assignment title typed yet"
+      ),
+      createElement(
+        "small",
+        null,
+        `${draftCourse || "No course"} • ${draftPriority} priority • ${
+          draftDueDate || "No due date"
+        }`
+      )
+    ),
+
+    createElement(
+      "ul",
+      { className: "assignment-card-list" },
+      assignments.map((assignment) =>
+        createElement(
+          "li",
+          {
+            key: assignment.id,
+            className: assignment.completed
+              ? "assignment-card assignment-card-complete"
+              : "assignment-card",
+          },
+          createElement(
+            "div",
+            null,
+            createElement("h3", null, assignment.title),
+            createElement(
+              "p",
+              null,
+              `${assignment.course} • ${assignment.priority} priority`
+            ),
+            createElement(
+              "small",
+              null,
+              assignment.dueDate
+                ? `Due: ${assignment.dueDate}`
+                : "No due date selected"
+            )
+          ),
+          createElement(
+            "div",
+            { className: "assignment-actions" },
+            createElement(
+              "button",
+              {
+                type: "button",
+                onClick: () => toggleAssignment(assignment.id),
+              },
+              assignment.completed ? "Undo" : "Complete"
+            ),
+            createElement(
+              "button",
+              {
+                type: "button",
+                className: "remove-button",
+                onClick: () => removeAssignment(assignment.id),
+              },
+              "Remove"
+            )
+          )
+        )
+      )
+    )
   );
 }
 
-export default AssignmentsPage;
+export default AssignmentPage;
