@@ -1,0 +1,73 @@
+import type { ProgressTask } from "../types/ProgressTask";
+export const progressTaskTestData: ProgressTask[] = [
+ {
+   id: 1,
+   task: "Set up Sprint 3 architecture folders",
+   owner: "Arshpreet",
+   status: "Done",
+   percent: 100,
+ },
+ {
+   id: 2,
+   task: "Refactor Assignments feature",
+   owner: "Arshpreet",
+   status: "Done",
+   percent: 100,
+ },
+ {
+   id: 3,
+   task: "Refactor Resources feature",
+   owner: "Dilraj",
+   status: "Done",
+   percent: 100,
+ },
+ {
+   id: 4,
+   task: "Refactor Team Progress feature",
+   owner: "Jaspreet",
+   status: "In Progress",
+   percent: 60,
+ },
+ {
+   id: 5,
+   task: "Create progress repository",
+   owner: "Jaspreet",
+   status: "In Progress",
+   percent: 70,
+ },
+ {
+   id: 6,
+   task: "Create progress service",
+   owner: "Jaspreet",
+   status: "Planned",
+   percent: 30,
+ },
+ {
+   id: 7,
+   task: "Create progress hook",
+   owner: "Jaspreet",
+   status: "Planned",
+   percent: 20,
+ },
+ {
+   id: 8,
+   task: "Review pull requests",
+   owner: "Dilraj",
+   status: "Blocked",
+   percent: 40,
+ },
+ {
+   id: 9,
+   task: "Update architecture documents",
+   owner: "Team",
+   status: "Planned",
+   percent: 10,
+ },
+ {
+   id: 10,
+   task: "Final Sprint 3 testing",
+   owner: "Team",
+   status: "Planned",
+   percent: 0,
+ },
+];
