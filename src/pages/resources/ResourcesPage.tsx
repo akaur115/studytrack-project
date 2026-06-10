@@ -5,17 +5,14 @@ import {
  type Dispatch,
  type SetStateAction,
 } from "react";
-
 import ResourceForm from "../../components/forms/ResourceForm";
 import { useResourceCategories } from "../../hooks/useResourceCategories";
 import { useResources } from "../../hooks/useResources";
 import type { ResourceCategory } from "../../types/StudyResource";
-
 type ResourcesPageProps = {
  teamPoints?: number;
  setTeamPoints?: Dispatch<SetStateAction<number>>;
 };
-
 function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
  const [draftName, setDraftName] = useState("");
  const [draftCategory, setDraftCategory] =
