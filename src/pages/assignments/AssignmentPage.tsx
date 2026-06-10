@@ -5,21 +5,12 @@ import {
   type SetStateAction,
 } from "react";
 import AssignmentForm from "../../components/forms/AssignmentForm";
-
-type AssignmentPriority = "Low" | "Medium" | "High";
-
-type Assignment = {
-  id: number;
-  title: string;
-  course: string;
-  priority: AssignmentPriority;
-  dueDate: string;
-  completed: boolean;
-};
+import { useAssignments } from "../../hooks/useAssignments";
+import type { AssignmentPriority } from "../../types/Assignment";
 
 type AssignmentPageProps = {
-  teamPoints: number;
-  setTeamPoints: Dispatch<SetStateAction<number>>;
+  teamPoints?: number;
+  setTeamPoints?: Dispatch<SetStateAction<number>>;
 };
 
 function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
@@ -29,68 +20,48 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
     useState<AssignmentPriority>("Medium");
   const [draftDueDate, setDraftDueDate] = useState("");
 
-  const [assignments, setAssignments] = useState<Assignment[]>([
-    {
-      id: 1,
-      title: "Finish Sprint 2 routing",
-      course: "Full Stack Development",
-      priority: "High",
-      dueDate: "2026-05-20",
-      completed: false,
-    },
-    {
-      id: 2,
-      title: "Update Kanban board",
-      course: "Project Work",
-      priority: "Medium",
-      dueDate: "2026-05-21",
-      completed: true,
-    },
-  ]);
+  const {
+    assignments,
+    visibleAssignments,
+    priorityFilter,
+    setPriorityFilter,
+    completedCount,
+    remainingCount,
+    addAssignment,
+    removeAssignment,
+    toggleAssignment,
+  } = useAssignments();
 
-  const completedCount = assignments.filter(
-    (assignment) => assignment.completed
-  ).length;
+  /*
+    Sprint 3 architecture use:
+    This component uses the useAssignments custom hook instead of keeping
+    assignment logic directly inside the page. The hook connects the page
+    to the assignment service and assignment repository. This keeps the page
+    focused on displaying the Assignments UI.
+  */
 
-  const remainingCount = assignments.length - completedCount;
+  function handleAddAssignment() {
+    addAssignment(draftTitle, draftCourse, draftPriority, draftDueDate);
 
-  function addAssignment() {
     if (draftTitle.trim() === "" || draftCourse.trim() === "") {
       return;
     }
 
-    const nextAssignment: Assignment = {
-      id: Date.now(),
-      title: draftTitle,
-      course: draftCourse,
-      priority: draftPriority,
-      dueDate: draftDueDate,
-      completed: false,
-    };
-
-    setAssignments([...assignments, nextAssignment]);
     setDraftTitle("");
     setDraftCourse("");
     setDraftPriority("Medium");
     setDraftDueDate("");
-    setTeamPoints((points) => points + 1);
+    setTeamPoints?.((points) => points + 1);
   }
 
-  function removeAssignment(id: number) {
-    setAssignments(assignments.filter((assignment) => assignment.id !== id));
-    setTeamPoints((points) => points + 1);
+  function handleRemoveAssignment(id: number) {
+    removeAssignment(id);
+    setTeamPoints?.((points) => points + 1);
   }
 
-  function toggleAssignment(id: number) {
-    setAssignments(
-      assignments.map((assignment) =>
-        assignment.id === id
-          ? { ...assignment, completed: !assignment.completed }
-          : assignment
-      )
-    );
-
-    setTeamPoints((points) => points + 1);
+  function handleToggleAssignment(id: number) {
+    toggleAssignment(id);
+    setTeamPoints?.((points) => points + 1);
   }
 
   return createElement(
@@ -102,7 +73,6 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
       { className: "page-description" },
       "This page helps students plan assignments by course, priority, and due date."
     ),
-
     createElement(
       "div",
       { className: "assignment-dashboard" },
@@ -125,22 +95,22 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
         createElement("span", null, "Completed")
       )
     ),
-
-    createElement(
-      "div",
-      { className: "shared-box" },
-      createElement("strong", null, "Team activity points:"),
-      createElement("span", null, teamPoints),
-      createElement(
-        "button",
-        {
-          type: "button",
-          onClick: () => setTeamPoints((points) => points + 1),
-        },
-        "Add Point"
-      )
-    ),
-
+    teamPoints !== undefined
+      ? createElement(
+          "div",
+          { className: "shared-box" },
+          createElement("strong", null, "Team activity points:"),
+          createElement("span", null, teamPoints),
+          createElement(
+            "button",
+            {
+              type: "button",
+              onClick: () => setTeamPoints?.((points) => points + 1),
+            },
+            "Add Point"
+          )
+        )
+      : null,
     createElement(AssignmentForm, {
       draftTitle,
       setDraftTitle,
@@ -150,18 +120,13 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
       setDraftPriority,
       draftDueDate,
       setDraftDueDate,
-      addAssignment,
+      addAssignment: handleAddAssignment,
     }),
-
     createElement(
       "div",
       { className: "assignment-preview" },
       createElement("h3", null, "Live Preview"),
-      createElement(
-        "p",
-        null,
-        draftTitle || "No assignment title typed yet"
-      ),
+      createElement("p", null, draftTitle || "No assignment title typed yet"),
       createElement(
         "small",
         null,
@@ -170,11 +135,29 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
         }`
       )
     ),
-
+    createElement(
+      "div",
+      { className: "assignment-filter" },
+      createElement("label", null, "Filter by priority"),
+      createElement(
+        "select",
+        {
+          value: priorityFilter,
+          onChange: (event: React.ChangeEvent<HTMLSelectElement>) =>
+            setPriorityFilter(
+              event.currentTarget.value as AssignmentPriority | "All"
+            ),
+        },
+        createElement("option", { value: "All" }, "All"),
+        createElement("option", { value: "Low" }, "Low"),
+        createElement("option", { value: "Medium" }, "Medium"),
+        createElement("option", { value: "High" }, "High")
+      )
+    ),
     createElement(
       "ul",
       { className: "assignment-card-list" },
-      assignments.map((assignment) =>
+      visibleAssignments.map((assignment) =>
         createElement(
           "li",
           {
@@ -207,7 +190,7 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
               "button",
               {
                 type: "button",
-                onClick: () => toggleAssignment(assignment.id),
+                onClick: () => handleToggleAssignment(assignment.id),
               },
               assignment.completed ? "Undo" : "Complete"
             ),
@@ -216,7 +199,7 @@ function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
               {
                 type: "button",
                 className: "remove-button",
-                onClick: () => removeAssignment(assignment.id),
+                onClick: () => handleRemoveAssignment(assignment.id),
               },
               "Remove"
             )
