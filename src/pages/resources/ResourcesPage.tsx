@@ -1,26 +1,25 @@
-import {
-  createElement,
-  useState,
-  type ChangeEvent,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 
 import ResourceForm from "../../components/forms/ResourceForm";
-import { useResourceCategories } from "../../hooks/useResourceCategories";
 import { useResources } from "../../hooks/useResources";
-import type { ResourceCategory } from "../../types/StudyResource";
- 
+import {
+  RESOURCE_CATEGORIES,
+  type ResourceCategory,
+} from "../../types/StudyResource";
+
 type ResourcesPageProps = {
   teamPoints?: number;
   setTeamPoints?: Dispatch<SetStateAction<number>>;
 };
- 
+
+const filterCategoryOptions = ["All", ...RESOURCE_CATEGORIES] as const;
+
 function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
   const [draftName, setDraftName] = useState("");
   const [draftCategory, setDraftCategory] =
     useState<ResourceCategory>("Notes");
   const [draftSource, setDraftSource] = useState("");
+
   const {
     resources,
     visibleResources,
@@ -32,290 +31,158 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
     removeResource,
     toggleSavedResource,
   } = useResources();
- 
-  const { filterCategoryOptions, getCategoryLabel } = useResourceCategories();
- 
+
   function handleAddResource() {
     const resourceWasAdded = addResource(
       draftName,
       draftCategory,
       draftSource
     );
- 
+
     if (!resourceWasAdded) {
       return;
     }
- 
+
     setDraftName("");
     setDraftCategory("Notes");
     setDraftSource("");
     setTeamPoints?.((points) => points + 1);
   }
- 
+
   function handleRemoveResource(id: number) {
     removeResource(id);
     setTeamPoints?.((points) => points + 1);
   }
- 
+
   function handleToggleSaved(id: number) {
     toggleSavedResource(id);
     setTeamPoints?.((points) => points + 1);
   }
- 
-  return createElement(
-    "section",
-    { className: "page-card resource-page" },
-    createElement("h2", null, "Study Resource Library"),
-    createElement(
-      "p",
-      { className: "page-description" },
-      "This page helps students organize study resources by category and saved status."
-    ),
 
-    createElement(
-      "div",
-      { className: "resource-dashboard" },
-      createElement(
-        "article",
-        null,
-        createElement("strong", null, resources.length),
-        createElement("span", null, "Total resources")
-      ),
+  return (
+    <section className="page-card resource-page">
+      <h2>Study Resource Library</h2>
 
-      createElement(
-        "article",
-        null,
+      <p className="page-description">
+        This page helps students organize study resources by category and saved
+        status.
+      </p>
 
-        createElement("strong", null, savedCount),
+      <div className="resource-dashboard">
+        <article>
+          <strong>{resources.length}</strong>
+          <span>Total resources</span>
+        </article>
 
-        createElement("span", null, "Saved resources")
+        <article>
+          <strong>{savedCount}</strong>
+          <span>Saved resources</span>
+        </article>
 
-      ),
+        <article>
+          <strong>{videoCount}</strong>
+          <span>Video resources</span>
+        </article>
+      </div>
 
-      createElement(
-        "article",
-        null,
-        createElement("strong", null, videoCount),
+      {teamPoints !== undefined && (
+        <div className="shared-box">
+          <strong>Team activity points:</strong>
+          <span>{teamPoints}</span>
 
-        createElement("span", null, "Video resources")
+          <button
+            type="button"
+            onClick={() => setTeamPoints?.((points) => points + 1)}
+          >
+            Add Point
+          </button>
+        </div>
+      )}
 
-      )
+      <ResourceForm
+        draftName={draftName}
+        setDraftName={setDraftName}
+        draftCategory={draftCategory}
+        setDraftCategory={setDraftCategory}
+        draftSource={draftSource}
+        setDraftSource={setDraftSource}
+        addResource={handleAddResource}
+      />
 
-    ),
+      <div className="resource-preview">
+        <h3>Resource Preview</h3>
+        <p>{draftName || "No resource name typed yet"}</p>
 
-    teamPoints !== undefined
+        <small>
+          {draftCategory} • {draftSource || "No source added"}
+        </small>
+      </div>
 
-      ? createElement(
-          "div",
-          { className: "shared-box" },
-          createElement("strong", null, "Team activity points:"),
-          createElement("span", null, teamPoints),
-          createElement(
-            "button",
-            {
-              type: "button",
-              onClick: () => setTeamPoints?.((points) => points + 1),
-            },
-            "Add Point"
-          )
+      <div className="resource-filter">
+        <label htmlFor="resource-category-filter">
+          Filter by category
+        </label>
 
-        )
-
-      : null,
-
-    createElement(ResourceForm, {
-
-      draftName,
-
-      setDraftName,
-
-      draftCategory,
-
-      setDraftCategory,
-
-      draftSource,
-
-      setDraftSource,
-
-      addResource: handleAddResource,
-
-    }),
-
-    createElement(
-
-      "div",
-
-      { className: "resource-preview" },
-
-      createElement("h3", null, "Resource Preview"),
-
-      createElement("p", null, draftName || "No resource name typed yet"),
-
-      createElement(
-
-        "small",
-
-        null,
-
-        `${getCategoryLabel(draftCategory)} • ${
-
-          draftSource || "No source added"
-
-        }`
-
-      )
-
-    ),
-
-    createElement(
-
-      "div",
-
-      { className: "resource-filter" },
-
-      createElement("label", null, "Filter by category"),
-
-      createElement(
-
-        "select",
-
-        {
-
-          value: categoryFilter,
-
-          onChange: (event: ChangeEvent<HTMLSelectElement>) =>
-
+        <select
+          id="resource-category-filter"
+          value={categoryFilter}
+          onChange={(event) =>
             setCategoryFilter(
-
               event.currentTarget.value as ResourceCategory | "All"
-
-            ),
-
-        },
-
-        filterCategoryOptions.map((option) =>
-
-          createElement(
-
-            "option",
-
-            { key: option.value, value: option.value },
-
-            option.label
-
-          )
-
-        )
-
-      )
-
-    ),
-
-    createElement(
-
-      "ul",
-
-      { className: "resource-card-list" },
-
-      visibleResources.map((resource) =>
-
-        createElement(
-
-          "li",
-
-          {
-
-            key: resource.id,
-
-            className: resource.saved
-
-              ? "resource-card resource-card-saved"
-
-              : "resource-card",
-
-          },
-
-          createElement(
-
-            "div",
-
-            { className: "resource-card-main" },
-
-            createElement("h3", null, resource.name),
-
-            createElement(
-
-              "p",
-
-              null,
-
-              `${getCategoryLabel(resource.category)} • ${resource.source}`
-
-            ),
-
-            createElement(
-
-              "small",
-
-              null,
-
-              resource.saved ? "Saved resource" : "Not saved yet"
-
             )
+          }
+        >
+          {filterCategoryOptions.map((category) => (
+            <option key={category} value={category}>
+              {category === "All" ? "All Resources" : category}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          ),
+      <ul className="resource-card-list">
+        {visibleResources.map((resource) => (
+          <li
+            key={resource.id}
+            className={
+              resource.saved
+                ? "resource-card resource-card-saved"
+                : "resource-card"
+            }
+          >
+            <div className="resource-card-main">
+              <h3>{resource.name}</h3>
 
-          createElement(
+              <p>
+                {resource.category} • {resource.source}
+              </p>
 
-            "div",
+              <small>
+                {resource.saved ? "Saved resource" : "Not saved yet"}
+              </small>
+            </div>
 
-            { className: "resource-actions" },
+            <div className="resource-actions">
+              <button
+                type="button"
+                onClick={() => handleToggleSaved(resource.id)}
+              >
+                {resource.saved ? "Unsave" : "Save"}
+              </button>
 
-            createElement(
-
-              "button",
-
-              {
-
-                type: "button",
-
-                onClick: () => handleToggleSaved(resource.id),
-
-              },
-
-              resource.saved ? "Unsave" : "Save"
-
-            ),
-
-            createElement(
-
-              "button",
-
-              {
-
-                type: "button",
-
-                className: "remove-button",
-
-                onClick: () => handleRemoveResource(resource.id),
-
-              },
-
-              "Remove"
-
-            )
-
-          )
-
-        )
-
-      )
-
-    )
-
+              <button
+                type="button"
+                className="remove-button"
+                onClick={() => handleRemoveResource(resource.id)}
+              >
+                Remove
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
-
 }
- 
+
 export default ResourcesPage;
- 
