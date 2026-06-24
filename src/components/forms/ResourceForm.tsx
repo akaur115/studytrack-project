@@ -1,5 +1,8 @@
 import type { ChangeEvent, FormEvent } from "react";
-import type { ResourceCategory } from "../../types/StudyResource";
+import {
+  RESOURCE_CATEGORIES,
+  type ResourceCategory,
+} from "../../types/StudyResource";
 
 type ResourceFormProps = {
   draftName: string;
@@ -10,13 +13,6 @@ type ResourceFormProps = {
   setDraftSource: (value: string) => void;
   addResource: () => void;
 };
-
-const categoryOptions: ResourceCategory[] = [
-  "Notes",
-  "Video",
-  "Practice",
-  "Documentation",
-];
 
 function ResourceForm({
   draftName,
@@ -57,7 +53,7 @@ function ResourceForm({
               setDraftCategory(event.currentTarget.value as ResourceCategory)
             }
           >
-            {categoryOptions.map((category) => (
+            {RESOURCE_CATEGORIES.map((category) => (
               <option key={category} value={category}>
                 {category}
               </option>
