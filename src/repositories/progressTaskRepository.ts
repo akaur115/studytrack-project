@@ -1,45 +1,36 @@
-import { progressTaskTestData } from "../data/progressTaskTestData";
-
 import type { ProgressTask } from "../types/ProgressTask";
 
-let progressTasks: ProgressTask[] = [...progressTaskTestData];
+const API_URL = "/api/progress-tasks";
 
 export const progressTaskRepository = {
-
-  getAll(): ProgressTask[] {
-
-    return [...progressTasks];
-
+  async getAll(): Promise<ProgressTask[]> {
+    const response = await fetch(API_URL);
+    return response.json();
   },
 
-  create(progressTask: ProgressTask): ProgressTask {
+  async create(progressTask: Omit<ProgressTask, "id">): Promise<ProgressTask> {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(progressTask),
+    });
 
-    progressTasks = [...progressTasks, progressTask];
-
-    return progressTask;
-
+    return response.json();
   },
 
-  update(updatedProgressTask: ProgressTask): ProgressTask {
+  async markDone(id: number): Promise<ProgressTask> {
+    const response = await fetch(`${API_URL}/${id}/done`, {
+      method: "PATCH",
+    });
 
-    progressTasks = progressTasks.map((progressTask) =>
-progressTask.id === updatedProgressTask.id
-
-        ? updatedProgressTask
-
-        : progressTask
-
-    );
-
-    return updatedProgressTask;
-
+    return response.json();
   },
 
-  delete(id: number): void {
-
-    progressTasks = progressTasks.filter((progressTask) => progressTask.id !== id);
-
+  async delete(id: number): Promise<void> {
+    await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
   },
-
 };
- 
