@@ -1,10 +1,4 @@
-import {
-  createElement,
-  useState,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
-import AssignmentForm from "../../components/forms/AssignmentForm";
+import { useState, type Dispatch, type FormEvent, type SetStateAction } from "react";
 import { useAssignments } from "../../hooks/useAssignments";
 import type { AssignmentPriority } from "../../types/Assignment";
 
@@ -14,200 +8,147 @@ type AssignmentPageProps = {
 };
 
 function AssignmentPage({ teamPoints, setTeamPoints }: AssignmentPageProps) {
-  const [draftTitle, setDraftTitle] = useState("");
-  const [draftCourse, setDraftCourse] = useState("");
-  const [draftPriority, setDraftPriority] =
-    useState<AssignmentPriority>("Medium");
-  const [draftDueDate, setDraftDueDate] = useState("");
-
   const {
-    assignments,
     visibleAssignments,
     priorityFilter,
     setPriorityFilter,
     completedCount,
     remainingCount,
+    isLoading,
     addAssignment,
     removeAssignment,
     toggleAssignment,
   } = useAssignments();
 
-  /*
-    Sprint 3 architecture use:
-    This component uses the useAssignments custom hook instead of keeping
-    assignment logic directly inside the page. The hook connects the page
-    to the assignment service and assignment repository. This keeps the page
-    focused on displaying the Assignments UI.
-  */
+  const [title, setTitle] = useState("");
+  const [course, setCourse] = useState("");
+  const [priority, setPriority] = useState<AssignmentPriority>("Medium");
+  const [dueDate, setDueDate] = useState("");
 
-  function handleAddAssignment() {
-    addAssignment(draftTitle, draftCourse, draftPriority, draftDueDate);
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
 
-    if (draftTitle.trim() === "" || draftCourse.trim() === "") {
-      return;
-    }
+    addAssignment(title, course, priority, dueDate);
 
-    setDraftTitle("");
-    setDraftCourse("");
-    setDraftPriority("Medium");
-    setDraftDueDate("");
-    setTeamPoints?.((points) => points + 1);
+    setTitle("");
+    setCourse("");
+    setPriority("Medium");
+    setDueDate("");
   }
 
-  function handleRemoveAssignment(id: number) {
-    removeAssignment(id);
-    setTeamPoints?.((points) => points + 1);
+  if (isLoading) {
+    return <p>Loading assignments...</p>;
   }
 
-  function handleToggleAssignment(id: number) {
-    toggleAssignment(id);
-    setTeamPoints?.((points) => points + 1);
-  }
+  return (
+    <main className="assignment-page">
+      <h1>Assignment Planner</h1>
 
-  return createElement(
-    "section",
-    { className: "page-card assignment-page" },
-    createElement("h2", null, "Assignment Planner"),
-    createElement(
-      "p",
-      { className: "page-description" },
-      "This page helps students plan assignments by course, priority, and due date."
-    ),
-    createElement(
-      "div",
-      { className: "assignment-dashboard" },
-      createElement(
-        "article",
-        null,
-        createElement("strong", null, assignments.length),
-        createElement("span", null, "Total assignments")
-      ),
-      createElement(
-        "article",
-        null,
-        createElement("strong", null, remainingCount),
-        createElement("span", null, "Still remaining")
-      ),
-      createElement(
-        "article",
-        null,
-        createElement("strong", null, completedCount),
-        createElement("span", null, "Completed")
-      )
-    ),
-    teamPoints !== undefined
-      ? createElement(
-          "div",
-          { className: "shared-box" },
-          createElement("strong", null, "Team activity points:"),
-          createElement("span", null, teamPoints),
-          createElement(
-            "button",
-            {
-              type: "button",
-              onClick: () => setTeamPoints?.((points) => points + 1),
-            },
-            "Add Point"
-          )
-        )
-      : null,
-    createElement(AssignmentForm, {
-      draftTitle,
-      setDraftTitle,
-      draftCourse,
-      setDraftCourse,
-      draftPriority,
-      setDraftPriority,
-      draftDueDate,
-      setDraftDueDate,
-      addAssignment: handleAddAssignment,
-    }),
-    createElement(
-      "div",
-      { className: "assignment-preview" },
-      createElement("h3", null, "Live Preview"),
-      createElement("p", null, draftTitle || "No assignment title typed yet"),
-      createElement(
-        "small",
-        null,
-        `${draftCourse || "No course"} • ${draftPriority} priority • ${
-          draftDueDate || "No due date"
-        }`
-      )
-    ),
-    createElement(
-      "div",
-      { className: "assignment-filter" },
-      createElement("label", null, "Filter by priority"),
-      createElement(
-        "select",
-        {
-          value: priorityFilter,
-          onChange: (event: React.ChangeEvent<HTMLSelectElement>) =>
-            setPriorityFilter(
-              event.currentTarget.value as AssignmentPriority | "All"
-            ),
-        },
-        createElement("option", { value: "All" }, "All"),
-        createElement("option", { value: "Low" }, "Low"),
-        createElement("option", { value: "Medium" }, "Medium"),
-        createElement("option", { value: "High" }, "High")
-      )
-    ),
-    createElement(
-      "ul",
-      { className: "assignment-card-list" },
-      visibleAssignments.map((assignment) =>
-        createElement(
-          "li",
-          {
-            key: assignment.id,
-            className: assignment.completed
-              ? "assignment-card assignment-card-complete"
-              : "assignment-card",
-          },
-          createElement(
-            "div",
-            null,
-            createElement("h3", null, assignment.title),
-            createElement(
-              "p",
-              null,
-              `${assignment.course} • ${assignment.priority} priority`
-            ),
-            createElement(
-              "small",
-              null,
-              assignment.dueDate
-                ? `Due: ${assignment.dueDate}`
-                : "No due date selected"
-            )
-          ),
-          createElement(
-            "div",
-            { className: "assignment-actions" },
-            createElement(
-              "button",
-              {
-                type: "button",
-                onClick: () => handleToggleAssignment(assignment.id),
-              },
-              assignment.completed ? "Undo" : "Complete"
-            ),
-            createElement(
-              "button",
-              {
-                type: "button",
-                className: "remove-button",
-                onClick: () => handleRemoveAssignment(assignment.id),
-              },
-              "Remove"
-            )
-          )
-        )
-      )
-    )
+      <section className="assignment-summary">
+        <p>Total assignments: {visibleAssignments.length}</p>
+        <p>Remaining: {remainingCount}</p>
+        <p>Completed: {completedCount}</p>
+      </section>
+
+      <section className="team-points">
+        <p>Team activity points: {teamPoints ?? 0}</p>
+        <button type="button" onClick={() => setTeamPoints?.((points) => points + 1)}>
+          Add Point
+        </button>
+      </section>
+
+      <form className="assignment-form" onSubmit={handleSubmit}>
+        <h2>Create a New Assignment</h2>
+
+        <label>Assignment title</label>
+        <input
+          value={title}
+          onChange={(event) => setTitle(event.currentTarget.value)}
+          placeholder="Example: Sprint 4 planning"
+        />
+
+        <label>Course</label>
+        <input
+          value={course}
+          onChange={(event) => setCourse(event.currentTarget.value)}
+          placeholder="Example: Full Stack"
+        />
+
+        <label>Priority</label>
+        <select
+          value={priority}
+          onChange={(event) =>
+            setPriority(event.currentTarget.value as AssignmentPriority)
+          }
+        >
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+
+        <label>Due date</label>
+        <input
+          type="date"
+          value={dueDate}
+          onChange={(event) => setDueDate(event.currentTarget.value)}
+        />
+
+        <button type="submit">Save Assignment</button>
+      </form>
+
+      <section className="assignment-filter">
+        <label>Filter by priority</label>
+        <select
+          value={priorityFilter}
+          onChange={(event) =>
+            setPriorityFilter(event.currentTarget.value as AssignmentPriority | "All")
+          }
+        >
+          <option value="All">All</option>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </section>
+
+      <section className="assignment-list">
+        <h2>Assignment Table</h2>
+
+        <table className="assignment-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Course</th>
+              <th>Priority</th>
+              <th>Due Date</th>
+              <th>Completed</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visibleAssignments.map((assignment) => (
+              <tr key={assignment.id}>
+                <td>{assignment.title}</td>
+                <td>{assignment.course}</td>
+                <td>{assignment.priority} priority</td>
+                <td>{assignment.dueDate}</td>
+                <td>{assignment.completed ? "completed" : "remaining"}</td>
+                <td>
+                  <button type="button" onClick={() => toggleAssignment(assignment.id)}>
+                    {assignment.completed ? "Undo" : "Complete"}
+                  </button>
+                  <button type="button" onClick={() => removeAssignment(assignment.id)}>
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    </main>
   );
 }
 
 export default AssignmentPage;
+            

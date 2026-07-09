@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { assignmentRepository } from "../repositories/assignmentRepository";
 import { assignmentService } from "../services/assignmentService";
 import type {
@@ -7,12 +7,22 @@ import type {
 } from "../types/Assignment";
 
 export function useAssignments() {
-  const [assignments, setAssignments] = useState<Assignment[]>(
-    assignmentRepository.getAll()
-  );
-
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [priorityFilter, setPriorityFilter] =
     useState<AssignmentPriority | "All">("All");
+  const [isLoading, setIsLoading] = useState(true);
+
+  async function loadAssignments() {
+    try {
+      const data = await assignmentRepository.getAll();
+      setAssignments(data);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  useEffect(() => {
+    loadAssignments();
+  }, []);
 
   const visibleAssignments = assignmentService.filterByPriority(
     assignments,
@@ -22,7 +32,7 @@ export function useAssignments() {
   const completedCount = assignmentService.countCompleted(assignments);
   const remainingCount = assignmentService.countRemaining(assignments);
 
-  function addAssignment(
+  async function addAssignment(
     title: string,
     course: string,
     priority: AssignmentPriority,
@@ -32,23 +42,23 @@ export function useAssignments() {
       return;
     }
 
-    const newAssignment = assignmentService.createAssignment(
+    const newAssignment = await assignmentRepository.create({
       title,
       course,
       priority,
-      dueDate
-    );
+      dueDate,
+      completed: false,
+    });
 
-    assignmentRepository.create(newAssignment);
-    setAssignments(assignmentRepository.getAll());
+    setAssignments([...assignments, newAssignment]);
   }
 
-  function removeAssignment(id: number) {
-    assignmentRepository.delete(id);
-    setAssignments(assignmentRepository.getAll());
+  async function removeAssignment(id: number) {
+    await assignmentRepository.delete(id);
+    setAssignments(assignments.filter((assignment) => assignment.id !== id));
   }
 
-  function toggleAssignment(id: number) {
+  async function toggleAssignment(id: number) {
     const selectedAssignment = assignments.find(
       (assignment) => assignment.id === id
     );
@@ -57,25 +67,17 @@ export function useAssignments() {
       return;
     }
 
-    const updatedAssignment =
-      assignmentService.toggleCompleted(selectedAssignment);
+    const updatedAssignment = await assignmentRepository.update(id, {
+      completed: !selectedAssignment.completed,
+    });
 
-    assignmentRepository.update(updatedAssignment);
-    setAssignments(assignmentRepository.getAll());
+    setAssignments(
+      assignments.map((assignment) =>
+        assignment.id === id ? updatedAssignment : assignment
+      )
+    );
   }
 
-  /*
-    Returned values:
-    - assignments: full assignment list from the repository
-    - visibleAssignments: assignment list after priority filter
-    - priorityFilter: current selected priority filter
-    - setPriorityFilter: updates the selected priority filter
-    - completedCount: number of completed assignments
-    - remainingCount: number of incomplete assignments
-    - addAssignment: adds a new assignment through service and repository
-    - removeAssignment: deletes an assignment through repository
-    - toggleAssignment: updates completed status through service and repository
-  */
   return {
     assignments,
     visibleAssignments,
@@ -83,6 +85,7 @@ export function useAssignments() {
     setPriorityFilter,
     completedCount,
     remainingCount,
+    isLoading,
     addAssignment,
     removeAssignment,
     toggleAssignment,
