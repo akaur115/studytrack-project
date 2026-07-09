@@ -1,0 +1,54 @@
+.layout {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 28px 0;
+}
+
+.site-header {
+  background-color: #111827;
+  color: #ffffff;
+  padding: 28px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 2.4rem;
+}
+
+.site-header p {
+  margin-bottom: 20px;
+  color: #e5e7eb;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.site-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  border: 1px solid #4b5563;
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+.site-nav a.active {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+.page-area {
+  min-height: 55vh;
+}
+
+.site-footer {
+  margin-top: 28px;
+  border-top: 1px solid #d1d5db;
+  padding-top: 16px;
+  text-align: center;
+  color: #374151;
+}
