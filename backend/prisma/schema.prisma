@@ -3,6 +3,7 @@ generator client {
 }
 datasource db {
   provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 model Assignment {
  id        Int      @id @default(autoincrement())
