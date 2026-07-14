@@ -1,3 +1,6 @@
+import { app } from "./app.js";
+
+const port = 3001;
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";

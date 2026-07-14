@@ -1,27 +1,40 @@
-import { assignmentTestData } from "../data/assignmentTestData";
 import type { Assignment } from "../types/Assignment";
 
-let assignments: Assignment[] = [...assignmentTestData];
+const API_URL = "http://localhost:3001/api/assignments";
 
 export const assignmentRepository = {
-  getAll(): Assignment[] {
-    return [...assignments];
+  async getAll(): Promise<Assignment[]> {
+    const response = await fetch(API_URL);
+    return response.json();
   },
 
-  create(assignment: Assignment): Assignment {
-    assignments = [...assignments, assignment];
-    return assignment;
+  async create(assignment: Omit<Assignment, "id">): Promise<Assignment> {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(assignment),
+    });
+
+    return response.json();
   },
 
-  update(updatedAssignment: Assignment): Assignment {
-    assignments = assignments.map((assignment) =>
-      assignment.id === updatedAssignment.id ? updatedAssignment : assignment
-    );
+  async update(id: number, changes: Partial<Assignment>): Promise<Assignment> {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(changes),
+    });
 
-    return updatedAssignment;
+    return response.json();
   },
 
-  delete(id: number): void {
-    assignments = assignments.filter((assignment) => assignment.id !== id);
+  async delete(id: number): Promise<void> {
+    await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
   },
 };
