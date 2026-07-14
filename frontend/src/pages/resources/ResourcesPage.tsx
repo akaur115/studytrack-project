@@ -136,47 +136,57 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
         </select>
       </div>
 
-      <ul className="resource-card-list">
-        {visibleResources.map((resource) => (
-          <li
-            key={resource.id}
-            className={
-              resource.saved
-                ? "resource-card resource-card-saved"
-                : "resource-card"
-            }
-          >
-            <div className="resource-card-main">
-              <h3>{resource.name}</h3>
+      <div className="resource-grid">
+  {visibleResources.map((resource) => (
+    <div 
+      key={resource.id}
+      className="resource-card"
+    >
+      <div className="resource-card-header">
+        <h3>{resource.name}</h3>
 
-              <p>
-                {getCategoryLabel(resource.category)} • {resource.source}
-              </p>
+        <span
+          className={
+            resource.saved 
+            ? "status completed"
+            : "status pending"
+          }
+        >
+          {resource.saved ? "Completed" : "Pending"}
+        </span>
+      </div>
 
-              <small>
-                {resource.saved ? "Completed" : "Pending"}
-              </small>
-            </div>
 
-            <div className="resource-actions">
-              <button
-                type="button"
-                onClick={() => handleToggleSaved(resource.id)}
-              >
-                {resource.saved ? "Mark Pending" : "Mark Complete"}
-              </button>
+      <p>
+        <strong>Category:</strong> {getCategoryLabel(resource.category)}
+      </p>
 
-              <button
-                type="button"
-                className="remove-button"
-                onClick={() => handleRemoveResource(resource.id)}
-              >
-                Remove
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <p>
+        <strong>Source:</strong> {resource.source}
+      </p>
+
+
+      <div className="resource-actions">
+
+        <button
+        onClick={() => handleToggleSaved(resource.id)}
+>
+          {resource.saved ? "Mark Pending" : "Complete"}
+        </button>
+
+
+       <button
+       onClick={() => handleRemoveResource(resource.id)}
+       className="delete-btn"
+>
+       Remove
+      </button>
+
+      </div>
+
+    </div>
+  ))}
+</div>
     </section>
   );
 }

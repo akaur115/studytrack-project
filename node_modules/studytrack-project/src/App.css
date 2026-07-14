@@ -395,8 +395,9 @@ button:hover {
 
   border-radius: 12px;
 
-  padding: 16px;
+  padding: 20px;
 
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
 }
  
 .resource-dashboard strong {
@@ -535,7 +536,7 @@ button:hover {
 
   border-radius: 12px;
 
-  padding: 16px;
+  padding: 18px;
 
   margin-bottom: 14px;
 
@@ -545,18 +546,7 @@ button:hover {
 
   gap: 16px;
 
-}
- 
-.resource-card h3 {
-
-  margin: 0 0 8px;
-
-}
- 
-.resource-card p {
-
-  margin: 0 0 6px;
-
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
  
 .resource-card-saved {
@@ -572,13 +562,31 @@ button:hover {
 }
  
 .resource-actions {
-
   display: flex;
 
   gap: 8px;
 
   align-items: center;
+}
 
+
+.resource-actions button:first-child {
+  background-color: #0f766e;
+}
+
+
+.resource-actions button:first-child:hover {
+  background-color: #115e59;
+}
+
+
+.resource-actions button:last-child {
+  background-color: #dc2626;
+}
+
+
+.resource-actions button:last-child:hover {
+  background-color: #991b1b;
 }
  
 @media (max-width: 800px) {
@@ -597,6 +605,32 @@ button:hover {
 
   }
 
+}
+
+.resource-status {
+  display: inline-block;
+
+  padding: 5px 12px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+
+  font-weight: bold;
+}
+
+
+.resource-completed {
+  background-color: #dcfce7;
+
+  color: #166534;
+}
+
+
+.resource-pending {
+  background-color: #fee2e2;
+
+  color: #991b1b;
 }
  
 /* Jaspreet Progress Page */
@@ -840,4 +874,3 @@ button:hover {
   }
 
 }
- 
