@@ -4,49 +4,25 @@
 
 body {
   margin: 0;
-  background-color: #f9fafb;
-  color: #1f2937;
   font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #1f2937;
 }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
+.page-card,
+.progress-page {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
-button {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  background-color: #111827;
-  color: #ffffff;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #374151;
-}
-
-.remove-button {
-  background-color: #6b7280;
-}
-
-.remove-button:hover {
-  background-color: #4b5563;
-}
-
-.page-card {
-  background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 14px;
-  padding: 22px;
-  margin-bottom: 20px;
-}
-
-.page-card h2 {
+.progress-page h2 {
   margin-top: 0;
+  font-size: 32px;
+  color: #1e3a8a;
 }
 
 .page-description {
@@ -208,622 +184,142 @@ button:hover {
 
 .progress-page {
   border-top: 6px solid #4c1d95;
+  color: #6b7280;
+  font-size: 16px;
+  margin-bottom: 25px;
 }
 
 .progress-dashboard {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin: 18px 0;
-}
-
-.progress-dashboard article {
-  background-color: #f5f3ff;
-  border: 1px solid #ddd6fe;
-  border-radius: 12px;
-  padding: 16px;
-}
-
-.progress-dashboard strong {
-  display: block;
-  font-size: 1.7rem;
-  color: #4c1d95;
-}
-
-.progress-dashboard span {
-  color: #4b5563;
-}
-
-.progress-form-panel {
-  background-color: #ffffff;
-  border: 1px solid #ddd6fe;
-  border-radius: 14px;
-  padding: 18px;
-  margin: 18px 0;
-}
-
-.progress-form-panel h3 {
-  margin-top: 0;
-}
-
-.progress-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 14px;
-}
-
-.progress-form-grid label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-weight: 700;
-}
-
-.progress-form-grid input,
-.progress-form-grid select {
-  border: 1px solid #9ca3af;
-  border-radius: 8px;
-  padding: 10px;
-}
-
-.progress-preview {
-  background-color: #faf5ff;
-  border-left: 5px solid #7c3aed;
-  padding: 14px;
-  margin: 18px 0;
-}
-
-.progress-preview h3 {
-  margin-top: 0;
-}
-
-.progress-filter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 18px 0;
-}
-
-.progress-filter label {
-  font-weight: 700;
-}
-
-.progress-filter select {
-  border: 1px solid #9ca3af;
-  border-radius: 8px;
-  padding: 8px;
-}
-
-.progress-card-list {
-  list-style: none;
-  padding: 0;
-}
-
-.progress-task-card {
-  background-color: #ffffff;
-  border: 1px solid #ddd6fe;
-  border-left: 6px solid #7c3aed;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 14px;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.progress-task-card h3 {
-  margin: 0 0 8px;
-}
-
-.progress-task-main {
-  flex: 1;
-}
-
-.progress-bar {
-  background-color: #e5e7eb;
-  border-radius: 999px;
-  height: 12px;
-  margin: 10px 0;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  background-color: #7c3aed;
-  height: 100%;
-}
-
-.progress-task-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-@media (max-width: 800px) {
-  .assignment-dashboard,
-  .assignment-form-grid,
-  .progress-dashboard,
-  .progress-form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .assignment-card,
-  .progress-task-card {
-    flex-direction: column;
-  }
-}
-
-/* Dilraj Resources Page */
- 
-.resource-page {
-
-  border-top: 6px solid #0f766e;
-
-}
- 
-.resource-dashboard {
-
-  display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
-  gap: 14px;
-
-  margin: 18px 0;
-
-}
- 
-.resource-dashboard article {
-
-  background-color: #f0fdfa;
-
-  border: 1px solid #99f6e4;
-
-  border-radius: 12px;
-
-  padding: 16px;
-
-}
- 
-.resource-dashboard strong {
-
-  display: block;
-
-  font-size: 1.8rem;
-
-  color: #0f766e;
-
-}
- 
-.resource-dashboard span {
-
-  color: #475569;
-
-}
- 
-.resource-form-panel {
-
-  background-color: #ffffff;
-
-  border: 1px solid #99f6e4;
-
-  border-radius: 14px;
-
-  padding: 18px;
-
-  margin: 18px 0;
-
-}
- 
-.resource-form-panel h3 {
-
-  margin-top: 0;
-
-}
- 
-.resource-form-grid {
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr 1fr;
-
-  gap: 14px;
-
-  margin-bottom: 14px;
-
-}
- 
-.resource-form-grid label {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 6px;
-
-  font-weight: 700;
-
-}
- 
-.resource-form-grid input,
-
-.resource-form-grid select {
-
-  border: 1px solid #94a3b8;
-
-  border-radius: 8px;
-
-  padding: 10px;
-
-}
- 
-.resource-preview {
-
-  background-color: #ecfeff;
-
-  border-left: 5px solid #0891b2;
-
-  padding: 14px;
-
-  margin: 18px 0;
-
-}
- 
-.resource-preview h3 {
-
-  margin-top: 0;
-
-}
- 
-.resource-filter {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  margin: 18px 0;
-
-}
- 
-.resource-filter label {
-
-  font-weight: 700;
-
-}
- 
-.resource-filter select {
-
-  border: 1px solid #94a3b8;
-
-  border-radius: 8px;
-
-  padding: 8px;
-
-}
- 
-.resource-card-list {
-
-  list-style: none;
-
-  padding: 0;
-
-}
- 
-.resource-card {
-
-  background-color: #ffffff;
-
-  border: 1px solid #99f6e4;
-
-  border-left: 6px solid #0f766e;
-
-  border-radius: 12px;
-
-  padding: 16px;
-
-  margin-bottom: 14px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 16px;
-
-}
- 
-.resource-card h3 {
-
-  margin: 0 0 8px;
-
-}
- 
-.resource-card p {
-
-  margin: 0 0 6px;
-
-}
- 
-.resource-card-saved {
-
-  background-color: #f0fdfa;
-
-}
- 
-.resource-card-main {
-
-  flex: 1;
-
-}
- 
-.resource-actions {
-
-  display: flex;
-
-  gap: 8px;
-
-  align-items: center;
-
-}
- 
-@media (max-width: 800px) {
-
-  .resource-dashboard,
-
-  .resource-form-grid {
-
-    grid-template-columns: 1fr;
-
-  }
- 
-  .resource-card {
-
-    flex-direction: column;
-
-  }
-
-}
- 
-/* Jaspreet Progress Page */
-
-.progress-page {
-
-  border-top: 6px solid #4c1d95;
-
-}
-
-.progress-dashboard {
-
-  display: grid;
-
-  grid-template-columns: repeat(4, 1fr);
-
-  gap: 14px;
-
-  margin: 18px 0;
-
+  gap: 18px;
+  margin-bottom: 30px;
 }
 
 .progress-dashboard article {
-
-  background-color: #f5f3ff;
-
-  border: 1px solid #ddd6fe;
-
-  border-radius: 12px;
-
-  padding: 16px;
-
+  background: #eef4ff;
+  padding: 20px;
+  border-radius: 15px;
+  border-left: 5px solid #2563eb;
 }
 
 .progress-dashboard strong {
-
   display: block;
-
-  font-size: 1.7rem;
-
-  color: #4c1d95;
-
+  font-size: 28px;
+  color: #1e40af;
 }
 
 .progress-dashboard span {
-
   color: #4b5563;
-
+  font-size: 14px;
 }
 
-.progress-form-panel {
-
-  background-color: #ffffff;
-
-  border: 1px solid #ddd6fe;
-
-  border-radius: 14px;
-
-  padding: 18px;
-
-  margin: 18px 0;
-
+.progress-page button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 5px;
 }
 
-.progress-form-panel h3 {
-
-  margin-top: 0;
-
+.progress-page button:hover {
+  background: #1d4ed8;
 }
 
-.progress-form-grid {
-
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 14px;
-
-  margin-bottom: 14px;
-
-}
-
-.progress-form-grid label {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 6px;
-
-  font-weight: 700;
-
-}
-
-.progress-form-grid input,
-
-.progress-form-grid select {
-
-  border: 1px solid #9ca3af;
-
-  border-radius: 8px;
-
+.progress-page input,
+.progress-page select {
   padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin: 6px;
+  font-size: 14px;
+}
 
+.progress-page input:focus,
+.progress-page select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.progress-page label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.progress-form {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  border: 1px solid #e5e7eb;
 }
 
 .progress-preview {
-
-  background-color: #faf5ff;
-
-  border-left: 5px solid #7c3aed;
-
-  padding: 14px;
-
-  margin: 18px 0;
-
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
 }
 
-.progress-preview h3 {
-
-  margin-top: 0;
-
+.progress-list {
+  margin-top: 25px;
 }
 
-.progress-filter {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  margin: 18px 0;
-
-}
-
-.progress-filter label {
-
-  font-weight: 700;
-
-}
-
-.progress-filter select {
-
-  border: 1px solid #9ca3af;
-
-  border-radius: 8px;
-
-  padding: 8px;
-
-}
-
-.progress-card-list {
-
-  list-style: none;
-
-  padding: 0;
-
-}
-
-.progress-task-card {
-
-  background-color: #ffffff;
-
-  border: 1px solid #ddd6fe;
-
-  border-left: 6px solid #7c3aed;
-
-  border-radius: 12px;
-
+.progress-item {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
   padding: 16px;
-
-  margin-bottom: 14px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 16px;
-
+  border-radius: 14px;
+  margin-bottom: 12px;
 }
 
-.progress-task-card h3 {
-
+.progress-item h3 {
   margin: 0 0 8px;
-
+  color: #111827;
 }
 
-.progress-task-main {
-
-  flex: 1;
-
+.status-planned {
+  color: #92400e;
+  font-weight: bold;
 }
 
-.progress-bar {
-
-  background-color: #e5e7eb;
-
-  border-radius: 999px;
-
-  height: 12px;
-
-  margin: 10px 0;
-
-  overflow: hidden;
-
+.status-progress {
+  color: #1d4ed8;
+  font-weight: bold;
 }
 
-.progress-bar-fill {
-
-  background-color: #7c3aed;
-
-  height: 100%;
-
+.status-completed {
+  color: #047857;
+  font-weight: bold;
 }
 
-.progress-task-actions {
-
-  display: flex;
-
-  gap: 8px;
-
-  align-items: center;
-
+footer {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+  color: #6b7280;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
+  .page-card,
+  .progress-page {
+    margin: 15px;
+    padding: 20px;
+  }
 
-  .progress-dashboard,
-
-  .progress-form-grid {
-
+  .progress-dashboard {
     grid-template-columns: 1fr;
-
   }
 
-  .progress-task-card {
-
-    flex-direction: column;
-
+  .progress-page input,
+  .progress-page select {
+    width: 100%;
+    margin: 6px 0;
   }
-
 }
- 

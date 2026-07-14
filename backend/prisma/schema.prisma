@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -12,4 +13,13 @@ model Assignment {
  priority  String
  dueDate   String
  completed Boolean  @default(false)
+
+model ProgressTask {
+  id        Int      @id @default(autoincrement())
+  title     String
+  owner     String
+  status    String
+  percent   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

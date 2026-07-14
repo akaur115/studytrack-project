@@ -7,7 +7,7 @@ export const progressTaskTestData: ProgressTask[] = [
    status: "Done",
    percent: 100,
  },
- {
+ { 
    id: 2,
    task: "Refactor Assignments feature",
    owner: "Arshpreet",
