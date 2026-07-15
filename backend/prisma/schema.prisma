@@ -13,6 +13,7 @@ model Assignment {
  priority  String
  dueDate   String
  completed Boolean  @default(false)
+}
 
 model ProgressTask {
   id        Int      @id @default(autoincrement())
@@ -20,6 +21,6 @@ model ProgressTask {
   owner     String
   status    String
   percent   Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+
 }

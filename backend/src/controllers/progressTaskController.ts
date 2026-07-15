@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { progressTaskService } from "../services/progressTaskService";
-import { progressTaskValidation } from "../validation/progressValidation";
+import { progressTaskService } from "../services/progressTaskService.js";
+import { progressTaskValidation } from "../validation/progressValidation.js";
 
 export async function getProgressTasks(req: Request, res: Response) {
   const tasks = await progressTaskService.getAll();

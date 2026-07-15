@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import assignmentRoutes from "./routes/assignmentRoutes.js";
+import { progressTaskRoutes } from "./routes/progressTaskRoutes.js";
 
 export const app = express();
 
@@ -17,3 +18,4 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/assignments", assignmentRoutes);
+app.use("/api/progress-tasks", progressTaskRoutes);
