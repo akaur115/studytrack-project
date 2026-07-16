@@ -1,7 +1,26 @@
-import { app } from "./app.js";
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import resourceRoutes from "./routes/resourceRoutes";
 
-const port = 3001;
+const app = express();
 
-app.listen(port, () => {
-  console.log(`Backend running on http://localhost:${port}`);
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
+
+app.use(express.json());
+
+app.get("/", (_req, res) => {
+  res.send("StudyTrack Backend Running");
+});
+
+app.use("/api/resources", resourceRoutes);
+
+const PORT = 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
