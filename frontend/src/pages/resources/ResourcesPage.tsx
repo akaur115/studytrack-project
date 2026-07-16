@@ -1,18 +1,14 @@
 import { useState, type Dispatch, type SetStateAction } from "react";
 
 import ResourceForm from "../../components/forms/ResourceForm";
+import { useResourceCategories } from "../../hooks/useResourceCategories";
 import { useResources } from "../../hooks/useResources";
-import {
-  RESOURCE_CATEGORIES,
-  type ResourceCategory,
-} from "../../types/StudyResource";
+import type { ResourceCategory } from "../../types/StudyResource";
 
 type ResourcesPageProps = {
   teamPoints?: number;
   setTeamPoints?: Dispatch<SetStateAction<number>>;
 };
-
-const filterCategoryOptions = ["All", ...RESOURCE_CATEGORIES] as const;
 
 function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
   const [draftName, setDraftName] = useState("");
@@ -32,8 +28,10 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
     toggleSavedResource,
   } = useResources();
 
-  function handleAddResource() {
-    const resourceWasAdded = addResource(
+  const { filterCategoryOptions, getCategoryLabel } = useResourceCategories();
+
+  async function handleAddResource() {
+    const resourceWasAdded = await addResource(
       draftName,
       draftCategory,
       draftSource
@@ -49,13 +47,13 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
     setTeamPoints?.((points) => points + 1);
   }
 
-  function handleRemoveResource(id: number) {
-    removeResource(id);
+  async function handleRemoveResource(id: number) {
+    await removeResource(id);
     setTeamPoints?.((points) => points + 1);
   }
 
-  function handleToggleSaved(id: number) {
-    toggleSavedResource(id);
+  async function handleToggleSaved(id: number) {
+    await toggleSavedResource(id);
     setTeamPoints?.((points) => points + 1);
   }
 
@@ -64,8 +62,8 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
       <h2>Study Resource Library</h2>
 
       <p className="page-description">
-        This page helps students organize study resources by category and saved
-        status.
+        This page helps students save, filter, and manage study resources from
+        the database.
       </p>
 
       <div className="resource-dashboard">
@@ -76,7 +74,7 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
 
         <article>
           <strong>{savedCount}</strong>
-          <span>Saved resources</span>
+          <span>Completed resources</span>
         </article>
 
         <article>
@@ -112,16 +110,14 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
       <div className="resource-preview">
         <h3>Resource Preview</h3>
         <p>{draftName || "No resource name typed yet"}</p>
-
         <small>
-          {draftCategory} • {draftSource || "No source added"}
+          {getCategoryLabel(draftCategory)} •{" "}
+          {draftSource || "No source added"}
         </small>
       </div>
 
       <div className="resource-filter">
-        <label htmlFor="resource-category-filter">
-          Filter by category
-        </label>
+        <label htmlFor="resource-category-filter">Filter by category</label>
 
         <select
           id="resource-category-filter"
@@ -132,55 +128,65 @@ function ResourcesPage({ teamPoints, setTeamPoints }: ResourcesPageProps) {
             )
           }
         >
-          {filterCategoryOptions.map((category) => (
-            <option key={category} value={category}>
-              {category === "All" ? "All Resources" : category}
+          {filterCategoryOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
             </option>
           ))}
         </select>
       </div>
 
-      <ul className="resource-card-list">
-        {visibleResources.map((resource) => (
-          <li
-            key={resource.id}
-            className={
-              resource.saved
-                ? "resource-card resource-card-saved"
-                : "resource-card"
-            }
-          >
-            <div className="resource-card-main">
-              <h3>{resource.name}</h3>
+      <div className="resource-grid">
+  {visibleResources.map((resource) => (
+    <div 
+      key={resource.id}
+      className="resource-card"
+    >
+      <div className="resource-card-header">
+        <h3>{resource.name}</h3>
 
-              <p>
-                {resource.category} • {resource.source}
-              </p>
+        <span
+          className={
+            resource.saved 
+            ? "status completed"
+            : "status pending"
+          }
+        >
+          {resource.saved ? "Completed" : "Pending"}
+        </span>
+      </div>
 
-              <small>
-                {resource.saved ? "Saved resource" : "Not saved yet"}
-              </small>
-            </div>
 
-            <div className="resource-actions">
-              <button
-                type="button"
-                onClick={() => handleToggleSaved(resource.id)}
-              >
-                {resource.saved ? "Unsave" : "Save"}
-              </button>
+      <p>
+        <strong>Category:</strong> {getCategoryLabel(resource.category)}
+      </p>
 
-              <button
-                type="button"
-                className="remove-button"
-                onClick={() => handleRemoveResource(resource.id)}
-              >
-                Remove
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <p>
+        <strong>Source:</strong> {resource.source}
+      </p>
+
+
+      <div className="resource-actions">
+
+        <button
+        onClick={() => handleToggleSaved(resource.id)}
+>
+          {resource.saved ? "Mark Pending" : "Complete"}
+        </button>
+
+
+       <button
+       onClick={() => handleRemoveResource(resource.id)}
+       className="delete-btn"
+>
+       Remove
+      </button>
+
+      </div>
+
+    </div>
+  ))}
+</div>
     </section>
   );
 }
