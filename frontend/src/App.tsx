@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Route, Routes } from "react-router";
 import "./App.css";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/home/HomePage";
 import AssignmentsPage from "./pages/assignments/AssignmentPage";
@@ -14,6 +15,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage teamPoints={teamPoints} />} />
+
         <Route
           path="assignments"
           element={
@@ -23,6 +25,7 @@ function App() {
             />
           }
         />
+
         <Route
           path="resources"
           element={
@@ -32,6 +35,7 @@ function App() {
             />
           }
         />
+
         <Route
           path="progress"
           element={

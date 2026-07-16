@@ -1,18 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { progressTaskRepository } from "../repositories/progressTaskRepository";
 import { progressTaskService } from "../services/progressTaskService";
-import type {
-  ProgressStatus,
-  ProgressTask,
-} from "../types/ProgressTask";
+import type { ProgressStatus, ProgressTask } from "../types/ProgressTask";
 
 export function useProgressTasks() {
-  const [progressTasks, setProgressTasks] = useState<ProgressTask[]>(
-    progressTaskRepository.getAll()
-  );
-
+  const [progressTasks, setProgressTasks] = useState<ProgressTask[]>([]);
   const [statusFilter, setStatusFilter] =
     useState<ProgressStatus | "All">("All");
+
+  async function loadProgressTasks() {
+    const tasks = await progressTaskRepository.getAll();
+    setProgressTasks(tasks);
+  }
+
+  useEffect(() => {
+    loadProgressTasks();
+  }, []);
 
   const visibleProgressTasks = progressTaskService.filterByStatus(
     progressTasks,
@@ -20,78 +23,40 @@ export function useProgressTasks() {
   );
 
   const completedCount = progressTaskService.countCompleted(progressTasks);
-
   const blockedCount = progressTaskService.countBlocked(progressTasks);
-
   const averageProgress =
     progressTaskService.calculateAverageProgress(progressTasks);
-  function addProgressTask(
+
+  async function addProgressTask(
     task: string,
     owner: string,
     status: ProgressStatus,
     percent: number
-  ): boolean {
+  ): Promise<boolean> {
     if (!progressTaskService.isValidProgressTask(task, owner)) {
       return false;
     }
 
-    const newProgressTask = progressTaskService.createProgressTask(
+    await progressTaskRepository.create({
       task,
       owner,
       status,
-      percent
-    );
+      percent: status === "Done" ? 100 : percent,
+    });
 
-    progressTaskRepository.create(newProgressTask);
-    setProgressTasks(progressTaskRepository.getAll());
+    await loadProgressTasks();
     return true;
   }
 
-  function removeProgressTask(id: number) {
-    progressTaskRepository.delete(id);
-    setProgressTasks(progressTaskRepository.getAll());
+  async function removeProgressTask(id: number) {
+    await progressTaskRepository.delete(id);
+    await loadProgressTasks();
   }
 
-  function markProgressTaskDone(id: number) {
-
-    const selectedProgressTask = progressTasks.find(
-      (progressTask) => progressTask.id === id
-    );
-
-    if (!selectedProgressTask) {
-      return;
-    }
-    const updatedProgressTask =
-      progressTaskService.markDone(selectedProgressTask);
-    progressTaskRepository.update(updatedProgressTask);
-    setProgressTasks(progressTaskRepository.getAll());
+  async function markProgressTaskDone(id: number) {
+    await progressTaskRepository.markDone(id);
+    await loadProgressTasks();
   }
-
-  /*
-
-    Returned values:
-
-    - progressTasks: full list of progress tasks from the repository
-
-    - visibleProgressTasks: progress tasks after status filtering
-
-    - statusFilter: current selected status filter
-
-    - setStatusFilter: updates the selected filter
-
-    - completedCount: number of completed tasks
-
-    - blockedCount: number of blocked tasks
-
-    - averageProgress: average progress percentage
-
-    - addProgressTask: adds a task using the service and repository
-
-    - removeProgressTask: removes a task using the repository
-
-    - markProgressTaskDone: updates a task to Done using service and repository
-
-  */
 
   return {
     progressTasks,
@@ -105,6 +70,4 @@ export function useProgressTasks() {
     removeProgressTask,
     markProgressTaskDone,
   };
-
 }
- 
