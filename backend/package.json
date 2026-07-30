@@ -6,6 +6,7 @@
     "dev": "tsx src/server.ts"
   },
   "dependencies": {
+    "@clerk/express": "^2.1.48",
     "@prisma/client": "^6.19.3",
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",

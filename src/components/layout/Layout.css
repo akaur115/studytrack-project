@@ -52,3 +52,23 @@
   text-align: center;
   color: #374151;
 }
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.auth-button {
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
+  background: transparent;
+}
+
+.auth-button:hover {
+  opacity: 0.8;
+}

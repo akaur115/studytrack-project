@@ -1,49 +1,33 @@
-import "./App.css";
-import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router";
 
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/home/HomePage";
 import AssignmentsPage from "./pages/assignments/AssignmentPage";
 import ResourcesPage from "./pages/resources/ResourcesPage";
-import ProgressPage from "./pages/progress/ProgressPage";
+import ProgressAccess from "./pages/progress/ProgressAccess";
 
 function App() {
-  const [teamPoints, setTeamPoints] = useState(0);
-
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage teamPoints={teamPoints} />} />
-
+      <Route element={<Layout />}>
         <Route
-          path="assignments"
-          element={
-            <AssignmentsPage
-              teamPoints={teamPoints}
-              setTeamPoints={setTeamPoints}
-            />
-          }
+          path="/"
+          element={<HomePage teamPoints={0} />}
         />
 
         <Route
-          path="resources"
-          element={
-            <ResourcesPage
-              teamPoints={teamPoints}
-              setTeamPoints={setTeamPoints}
-            />
-          }
+          path="/assignments"
+          element={<AssignmentsPage />}
         />
 
         <Route
-          path="progress"
-          element={
-            <ProgressPage
-              teamPoints={teamPoints}
-              setTeamPoints={setTeamPoints}
-            />
-          }
+          path="/resources"
+          element={<ResourcesPage />}
+        />
+
+        <Route
+          path="/progress"
+          element={<ProgressAccess />}
         />
       </Route>
     </Routes>

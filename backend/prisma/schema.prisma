@@ -7,12 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Assignment {
+  id        Int     @id @default(autoincrement())
+  title     String
+  course    String
+  dueDate   String
+  completed Boolean @default(false)
+}
+
 model ProgressTask {
   id        Int      @id @default(autoincrement())
-  title     String
+  task      String
   owner     String
   status    String
   percent   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  clerkUserId   String         @unique
+  email         String?
+  name          String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  progressTasks ProgressTask[]
 }

@@ -8,19 +8,14 @@ function HomePage({ teamPoints }: HomePageProps) {
       <h2>Welcome to StudyTrack</h2>
 
       <p className="page-description">
-        StudyTrack helps students organize assignments, study resources, and
-        team project progress in one place.
+        StudyTrack helps students organize assignments, share resources,
+        and track team project progress in one place.
       </p>
 
       <div className="shared-box">
         <strong>Team activity points:</strong>
         <span>{teamPoints}</span>
       </div>
-
-      <p className="page-description">
-        Use the navigation links to open the Assignments, Study Resources, and
-        Team Progress pages.
-      </p>
     </section>
   );
 }

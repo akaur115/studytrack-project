@@ -1,4 +1,5 @@
-import { Router } from "express";
+import { Router, type Request, type Response, type NextFunction } from "express";
+import { getAuth } from "@clerk/express";
 
 import {
   addProgressTask,
@@ -9,7 +10,43 @@ import {
 
 export const progressTaskRoutes = Router();
 
-progressTaskRoutes.get("/", getProgressTasks);
-progressTaskRoutes.post("/", addProgressTask);
-progressTaskRoutes.patch("/:id/done", markProgressTaskDone);
-progressTaskRoutes.delete("/:id", deleteProgressTask);
+function requireSignedInUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { isAuthenticated, userId } = getAuth(req);
+
+  if (!isAuthenticated || !userId) {
+    res.status(401).json({
+      message: "You must be logged in to manage progress tasks.",
+    });
+    return;
+  }
+
+  next();
+}
+
+progressTaskRoutes.get(
+  "/",
+  requireSignedInUser,
+  getProgressTasks
+);
+
+progressTaskRoutes.post(
+  "/",
+  requireSignedInUser,
+  addProgressTask
+);
+
+progressTaskRoutes.patch(
+  "/:id/done",
+  requireSignedInUser,
+  markProgressTaskDone
+);
+
+progressTaskRoutes.delete(
+  "/:id",
+  requireSignedInUser,
+  deleteProgressTask
+);
