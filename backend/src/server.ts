@@ -1,35 +1,26 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import { clerkMiddleware } from "@clerk/express";
-
-import { progressTaskRoutes } from "./routes/progressTaskRoutes";
-
-dotenv.config();
+import resourceRoutes from "./routes/resourceRoutes";
 
 const app = express();
-const port = Number(process.env.PORT) || 4000;
-const frontendUrl =
-  process.env.FRONTEND_URL || "http://localhost:5173";
-
-// Clerk must be registered before routes.
-app.use(clerkMiddleware());
 
 app.use(
   cors({
-    origin: frontendUrl,
-    credentials: true,
+    origin: "http://localhost:5173",
   })
 );
 
 app.use(express.json());
 
 app.get("/", (_req, res) => {
-  res.send("StudyTrack backend is running");
+  res.send("StudyTrack Backend Running");
 });
 
-app.use("/api/progress-tasks", progressTaskRoutes);
+app.use("/api/resources", resourceRoutes);
 
-app.listen(port, () => {
-  console.log(`Backend running on http://localhost:${port}`);
+const PORT = 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

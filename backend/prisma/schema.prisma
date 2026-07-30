@@ -3,8 +3,24 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+model Resource {
+  id       Int     @id @default(autoincrement())
+  name     String
+  category String
+  source   String
+  saved    Boolean @default(false)
+}
+
+model Assignment {
+  id        Int     @id @default(autoincrement())
+  title     String
+  course    String
+  priority  String
+  dueDate   String
+  completed Boolean @default(false)
 }
 
 model Assignment {
@@ -16,6 +32,7 @@ model Assignment {
 }
 
 model ProgressTask {
+<<<<<<< HEAD
   id        Int      @id @default(autoincrement())
   task      String
   owner     String
@@ -37,3 +54,11 @@ model User {
   updatedAt     DateTime       @updatedAt
   progressTasks ProgressTask[]
 }
+=======
+  id      Int    @id @default(autoincrement())
+  title   String
+  owner   String
+  status  String
+  percent Int
+}
+>>>>>>> edb09f40bc178f5c3cc8576bcbd316a24356be8e
