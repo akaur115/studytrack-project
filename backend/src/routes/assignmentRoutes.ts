@@ -4,8 +4,8 @@ import {
   deleteAssignment,
   getAssignments,
   updateAssignment,
-} from "../controllers/assignmentController.js";
-import { validateAssignment } from "../middleware/validateAssignment.js";
+} from "../controllers/assignmentController";
+import { validateAssignment } from "../middleware/validateAssignment";
 
 const router = express.Router();
 

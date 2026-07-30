@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import resourceRoutes from "./routes/resourceRoutes";
+import assignmentRoutes from "./routes/assignmentRoutes";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/api/resources", resourceRoutes);
+app.use("/api/assignments", assignmentRoutes);
 
 const PORT = 3000;
 

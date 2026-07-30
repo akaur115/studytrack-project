@@ -217,7 +217,49 @@ button:hover {
   gap: 8px;
   align-items: center;
 }
+.assignment-form {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1.3fr auto;
+  gap: 10px;
+  align-items: end;
+  margin: 20px 0;
+}
 
+.assignment-form input,
+
+.assignment-form select {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.assignment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.assignment-table th,
+
+.assignment-table td {
+  border: 1px solid #d1d5db;
+  padding: 10px;
+  text-align: left;
+}
+
+.assignment-table th {
+  background-color: #f3f4f6;
+}
+
+.assignment-table td:last-child {
+  white-space: nowrap;
+}
+.assignment-table button {
+  margin-right: 6px;
+}
+ 
 /* Jaspreet Progress Page */
 
 .progress-page {
