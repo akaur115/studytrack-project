@@ -13,15 +13,19 @@ export const resourceRepository = {
     return response.json();
   },
 
-  async create(resource: {
-    name: string;
-    category: string;
-    source: string;
-  }): Promise<StudyResource> {
+  async create(
+    resource: {
+      name: string;
+      category: string;
+      source: string;
+    },
+    token: string
+  ): Promise<StudyResource> {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(resource),
     });
@@ -35,12 +39,14 @@ export const resourceRepository = {
 
   async update(
     id: number,
-    resource: StudyResource
+    resource: StudyResource,
+    token: string
   ): Promise<StudyResource> {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(resource),
     });
@@ -52,9 +58,12 @@ export const resourceRepository = {
     return response.json();
   },
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, token: string): Promise<void> {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {

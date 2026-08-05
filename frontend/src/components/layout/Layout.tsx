@@ -1,5 +1,3 @@
-import { createElement } from "react";
-import { NavLink, Outlet } from "react-router";
 import {
   SignedIn,
   SignedOut,
@@ -7,139 +5,65 @@ import {
   SignUpButton,
   UserButton,
 } from "@clerk/clerk-react";
+import { NavLink, Outlet } from "react-router-dom";
 import "./Layout.css";
 
 function Layout() {
-  return createElement(
-    "div",
-    { className: "layout" },
+  return (
+    <div className="layout">
+      <header className="site-header">
+        <div className="site-brand">
+          <h1>StudyTrack</h1>
+          <p>
+            A student planning app for assignments, resources, and progress.
+          </p>
+        </div>
 
-    createElement(
-      "header",
-      { className: "site-header" },
+        <div className="navigation-row">
+          <nav className="site-nav" aria-label="Main navigation">
+            <NavLink to="/" end>
+              Home
+            </NavLink>
 
-      createElement(
-        "div",
-        { className: "site-brand" },
+            <NavLink to="/assignments">Assignments</NavLink>
+            <NavLink to="/resources">Resources</NavLink>
+            <NavLink to="/progress">Progress</NavLink>
 
-        createElement("h1", null, "StudyTrack"),
+            <SignedIn>
+              <NavLink to="/profile">Profile</NavLink>
+            </SignedIn>
+          </nav>
 
-        createElement(
-          "p",
-          null,
-          "A student planning app for assignments, resources, and progress."
-        )
-      ),
+          <div className="authentication-actions">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button type="button" className="login-button">
+                  Log In
+                </button>
+              </SignInButton>
 
-      createElement(
-        "div",
-        { className: "navigation-row" },
+              <SignUpButton mode="modal">
+                <button type="button" className="register-button">
+                  Register
+                </button>
+              </SignUpButton>
+            </SignedOut>
 
-        createElement(
-          "nav",
-          {
-            className: "site-nav",
-            "aria-label": "Main navigation",
-          },
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
+        </div>
+      </header>
 
-          createElement(
-            NavLink,
-            {
-              to: "/",
-              end: true,
-            },
-            "Home"
-          ),
+      <main className="page-area">
+        <Outlet />
+      </main>
 
-          createElement(
-            NavLink,
-            {
-              to: "/assignments",
-            },
-            "Assignments"
-          ),
-
-          createElement(
-            NavLink,
-            {
-              to: "/resources",
-            },
-            "Resources"
-          ),
-
-          createElement(
-            NavLink,
-            {
-              to: "/progress",
-            },
-            "Progress"
-          )
-        ),
-
-        createElement(
-          "div",
-          { className: "authentication-actions" },
-
-          createElement(
-            SignedOut,
-            null,
-
-            createElement(
-              SignInButton,
-              { mode: "modal" },
-
-              createElement(
-                "button",
-                {
-                  type: "button",
-                  className: "login-button",
-                },
-                "Log In"
-              )
-            ),
-
-            createElement(
-              SignUpButton,
-              { mode: "modal" },
-
-              createElement(
-                "button",
-                {
-                  type: "button",
-                  className: "register-button",
-                },
-                "Register"
-              )
-            )
-          ),
-
-          createElement(
-            SignedIn,
-            null,
-            createElement(UserButton, {
-              afterSignOutUrl: "/",
-            })
-          )
-        )
-      )
-    ),
-
-    createElement(
-      "main",
-      { className: "page-area" },
-      createElement(Outlet)
-    ),
-
-    createElement(
-      "footer",
-      { className: "site-footer" },
-
-      createElement(
-        "p",
-        null,
-        "Team Code: Dilraj, Arshpreet, and Jaspreet"
-      )
-    )
+      <footer className="site-footer">
+        <p>Team Code: Dilraj, Arshpreet, and Jaspreet</p>
+      </footer>
+    </div>
   );
 }
 
