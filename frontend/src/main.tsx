@@ -1,27 +1,25 @@
-import { ClerkProvider } from "@clerk/clerk-react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { ClerkProvider } from "@clerk/clerk-react";
 import App from "./App";
 import "./index.css";
 
-const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const clerkPublishableKey =
+  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-if (!publishableKey) {
+if (!clerkPublishableKey) {
   throw new Error(
-    "VITE_CLERK_PUBLISHABLE_KEY is missing from frontend/.env"
+    "Missing Vite_clerk_publishable_key in frontend/.env"
   );
 }
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ClerkProvider
-      publishableKey={publishableKey}
-      afterSignOutUrl="/"
-    >
+    <ClerkProvider publishableKey={clerkPublishableKey}>
       <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <App />
+    </BrowserRouter>
     </ClerkProvider>
   </StrictMode>
 );

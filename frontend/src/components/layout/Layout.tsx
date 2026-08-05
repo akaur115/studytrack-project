@@ -1,57 +1,69 @@
-import { createElement } from "react";
-import { NavLink, Outlet } from "react-router";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/clerk-react";
+import { NavLink, Outlet } from "react-router-dom";
 import "./Layout.css";
 
 function Layout() {
-  return createElement(
-    "div",
-    { className: "layout" },
+  return (
+    <div className="layout">
+      <header className="site-header">
+        <div className="site-brand">
+          <h1>StudyTrack</h1>
+          <p>
+            A student planning app for assignments, resources, and progress.
+          </p>
+        </div>
 
-    createElement(
-      "header",
-      { className: "site-header" },
+        <div className="navigation-row">
+          <nav className="site-nav" aria-label="Main navigation">
+            <NavLink to="/" end>
+              Home
+            </NavLink>
 
-      createElement(
-        "div",
-        null,
-        createElement("h1", null, "StudyTrack"),
-        createElement(
-          "p",
-          null,
-          "A student planning app for assignments, resources, and progress."
-        )
-      ),
+            <NavLink to="/assignments">Assignments</NavLink>
+            <NavLink to="/resources">Resources</NavLink>
+            <NavLink to="/progress">Progress</NavLink>
 
-      createElement(
-        "nav",
-        {
-          className: "site-nav",
-          "aria-label": "Main navigation",
-        },
+            <SignedIn>
+              <NavLink to="/profile">Profile</NavLink>
+            </SignedIn>
+          </nav>
 
-        createElement(NavLink, { to: "/profile" }, "Profile"),
-        createElement(NavLink, { to: "/" }, "Home"),
-        createElement(NavLink, { to: "/assignments" }, "Assignments"),
-        createElement(NavLink, { to: "/resources" }, "Resources"),
-        createElement(NavLink, { to: "/progress" }, "Progress")
-      )
-    ),
+          <div className="authentication-actions">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button type="button" className="login-button">
+                  Log In
+                </button>
+              </SignInButton>
 
-    createElement(
-      "main",
-      { className: "page-area" },
-      createElement(Outlet)
-    ),
+              <SignUpButton mode="modal">
+                <button type="button" className="register-button">
+                  Register
+                </button>
+              </SignUpButton>
+            </SignedOut>
 
-    createElement(
-      "footer",
-      { className: "site-footer" },
-      createElement(
-        "p",
-        null,
-        "Team Code: Dilraj, Arshpreet, and Jaspreet"
-      )
-    )
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
+        </div>
+      </header>
+
+      <main className="page-area">
+        <Outlet />
+      </main>
+
+      <footer className="site-footer">
+        <p>Team Code: Dilraj, Arshpreet, and Jaspreet</p>
+      </footer>
+    </div>
   );
 }
 

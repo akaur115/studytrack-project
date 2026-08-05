@@ -2,6 +2,25 @@ import { clerkClient, getAuth } from "@clerk/express";
 import type { Request, Response } from "express";
 import { prisma } from "../prisma";
 
+async function getClerkProfile(userId: string) {
+  const clerkUser = await clerkClient.users.getUser(userId);
+
+  const email =
+    clerkUser.emailAddresses.find(
+      (item) => item.id === clerkUser.primaryEmailAddressId
+    )?.emailAddress ??
+    clerkUser.emailAddresses[0]?.emailAddress ??
+    null;
+
+  const fullName = [clerkUser.firstName, clerkUser.lastName]
+    .filter(Boolean)
+    .join(" ");
+
+  const displayName = fullName || clerkUser.username || null;
+
+  return { email, displayName };
+}
+
 export async function syncCurrentUser(
   req: Request,
   res: Response
@@ -16,37 +35,24 @@ export async function syncCurrentUser(
       return;
     }
 
-    const clerkUser = await clerkClient.users.getUser(userId);
-
-    const primaryEmail =
-      clerkUser.emailAddresses.find(
-        (email) => email.id === clerkUser.primaryEmailAddressId
-      )?.emailAddress ??
-      clerkUser.emailAddresses[0]?.emailAddress ??
-      null;
-
-    const fullName = [clerkUser.firstName, clerkUser.lastName]
-      .filter(Boolean)
-      .join(" ");
-
-    const displayName = fullName || clerkUser.username || null;
-
-    const appUser = await prisma.appUser.upsert({
+    const appUser = await prisma.user.upsert({
       where: {
         clerkUserId: userId,
       },
       update: {
-        email: primaryEmail,
-        displayName,
+        clerkUserId: userId,
       },
       create: {
         clerkUserId: userId,
-        email: primaryEmail,
-        displayName,
       },
     });
 
-    res.status(200).json(appUser);
+    const profile = await getClerkProfile(userId);
+
+    res.status(200).json({
+      ...appUser,
+      ...profile,
+    });
   } catch (error) {
     console.error("Unable to synchronize user:", error);
 
@@ -70,7 +76,7 @@ export async function getCurrentUser(
       return;
     }
 
-    const appUser = await prisma.appUser.findUnique({
+    const appUser = await prisma.user.findUnique({
       where: {
         clerkUserId: userId,
       },
@@ -83,7 +89,12 @@ export async function getCurrentUser(
       return;
     }
 
-    res.status(200).json(appUser);
+    const profile = await getClerkProfile(userId);
+
+    res.status(200).json({
+      ...appUser,
+      ...profile,
+    });
   } catch (error) {
     console.error("Unable to retrieve user:", error);
 
