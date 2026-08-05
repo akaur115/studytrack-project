@@ -1,4 +1,4 @@
-import prisma from "../prisma/prismaClient";
+import { prisma } from "../prisma";
 
 export const progressTaskService = {
   getAll() {
@@ -15,7 +15,7 @@ export const progressTaskService = {
   }) {
     return prisma.progressTask.create({
       data: {
-        task: data.task,
+        title: data.task,
         owner: data.owner,
         status: data.status,
         percent: data.status === "Done" ? 100 : data.percent,

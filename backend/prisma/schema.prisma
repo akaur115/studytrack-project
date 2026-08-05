@@ -1,9 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 model Resource {
@@ -15,12 +16,21 @@ model Resource {
 }
 
 model Assignment {
-  id        Int     @id @default(autoincrement())
-  title     String
-  course    String
-  priority  String
-  dueDate   String
-  completed Boolean @default(false)
+  id          Int     @id @default(autoincrement())
+  title       String
+  course      String
+  priority    String
+  dueDate     String
+  description String?
+  completed   Boolean @default(false)
+
+  userId      Int?
+  user        User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model ProgressTask {
@@ -29,4 +39,12 @@ model ProgressTask {
   owner   String
   status  String
   percent Int
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  clerkUserId String       @unique
+  assignments Assignment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }

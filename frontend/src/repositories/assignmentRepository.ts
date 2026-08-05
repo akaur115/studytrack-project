@@ -1,40 +1,91 @@
-import type { Assignment } from "../types/Assignment";
+import type { 
+  Assignment,
+  AssignmentPriority } from "../types/Assignment";
 
-const API_URL = "http://localhost:3001/api/assignments";
+const API_URL =
+ import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
+
+export interface CreateAssignmentData {
+  title: string;
+  course: string;
+  priority: AssignmentPriority;
+  dueDate: string;
+  description?: string;
+  completed?: boolean;
+}
+
+export interface UpdateAssignmentData {
+ title?: string;
+ course?: string;
+ priority?: AssignmentPriority;
+ dueDate?: string;
+ description?: string;
+ completed?: boolean;
+}
+
+function getAuthHeaders(token: string): HeadersInit {
+ return {
+   "Content-Type": "application/json",
+   Authorization: `Bearer ${token}`,
+ };
+}
 
 export const assignmentRepository = {
-  async getAll(): Promise<Assignment[]> {
-    const response = await fetch(API_URL);
-    return response.json();
+ async getAll(token: string): Promise<Assignment[]> {
+   const response = await fetch(`${API_URL}/assignments`, {
+     method: "GET",
+     headers: getAuthHeaders(token),
+   });
+   if (!response.ok) {
+     throw new Error("Failed to load assignments");
+   }
+
+   return (await response.json()) as Assignment[];
   },
+  
+  async create(
+   assignment: CreateAssignmentData,
+   token: string
+ ): Promise<Assignment> {
+   const response = await fetch(`${API_URL}/assignments`, {
+     method: "POST",
+     headers: getAuthHeaders(token),
+     body: JSON.stringify(assignment),
+   });
 
-  async create(assignment: Omit<Assignment, "id">): Promise<Assignment> {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(assignment),
-    });
+   if (!response.ok) {
+     throw new Error("Failed to create assignment");
+   }
 
-    return response.json();
+   return (await response.json()) as Assignment;
   },
+  
+  async update(
+   id: number,
+   changes: UpdateAssignmentData,
+   token: string
+ ): Promise<Assignment> {
+   const response = await fetch(`${API_URL}/assignments/${id}`, {
+     method: "PATCH",
+     headers: getAuthHeaders(token),
+     body: JSON.stringify(changes),
+   });
 
-  async update(id: number, changes: Partial<Assignment>): Promise<Assignment> {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(changes),
-    });
+   if (!response.ok) {
+     throw new Error("Failed to update assignment");
+   }
 
-    return response.json();
-  },
+   return (await response.json()) as Assignment;
+ },
 
-  async delete(id: number): Promise<void> {
-    await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
-  },
+  async delete(id: number, token: string): Promise<void> {
+   const response = await fetch(`${API_URL}/assignments/${id}`, {
+     method: "DELETE",
+     headers: getAuthHeaders(token),
+   });
+
+   if (!response.ok) {
+     throw new Error("Failed to delete assignment");
+   }
+ },
 };
