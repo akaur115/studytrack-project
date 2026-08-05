@@ -2,55 +2,87 @@ import { prisma } from "../prisma";
 
 export interface CreateAssignmentData {
   title: string;
-  description?: string;
-  dueDate?: Date;
+  course: string;
+  priority: string;
+  dueDate: string;
+  completed?: boolean;
 }
 
-export async function findAssignmentsByUserId(userId: number) {
-  return prisma.assignment.findMany({
-    where: {
-      userId,
-    },
-    orderBy: {
-      id: "desc",
-    },
-  });
+export interface UpdateAssignmentData {
+  title?: string;
+  course?: string;
+  priority?: string;
+  dueDate?: string;
+  completed?: boolean;
 }
 
-export async function createAssignmentForUser(
-  userId: number,
-  data: CreateAssignmentData
-) {
-  return prisma.assignment.create({
-    data: {
-      ...data,
-      userId,
-    },
-  });
-}
+export const assignmentRepository = {
+  async getAllForUser(userId: number) {
+    return prisma.assignment.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        id: "desc",
+      },
+    });
+  },
 
-export async function updateAssignmentForUser(
-  assignmentId: number,
-  userId: number,
-  data: Partial<CreateAssignmentData>
-) {
-  return prisma.assignment.updateMany({
-    where: {
-      id: assignmentId,
-      userId,
-    },
-    data,
-  });
-}
+  async createForUser(userId: number, data: CreateAssignmentData) {
+    return prisma.assignment.create({
+      data: {
+        title: data.title,
+        course: data.course,
+        priority: data.priority,
+        dueDate: data.dueDate,
+        completed: data.completed ?? false,
+        userId,
+      },
+    });
+  },
 
-export async function deleteAssignmentForUser(
-  assignmentId: number,
-  userId: number
-) {
-  return prisma.assignment.deleteMany({
-    where: {
-      id: assignmentId,
-      userId,
-    },
-  });
-}
+  async updateForUser(
+    id: number,
+    userId: number,
+    data: UpdateAssignmentData
+  ) {
+
+    const assignment = await prisma.assignment.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!assignment) {
+      return null;
+    }
+
+    return prisma.assignment.update({
+      where: {
+        id,
+      },
+      data,
+    });
+  },
+
+  async deleteForUser(id: number, userId: number) {
+    const assignment = await prisma.assignment.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+    if (!assignment) {
+      return false;
+    }
+
+    await prisma.assignment.delete({
+      where: {
+        id,
+      },
+    });
+    return true;
+  },
+};
+ 

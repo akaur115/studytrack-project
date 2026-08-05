@@ -1,41 +1,52 @@
-import { prisma } from "../prisma";
+import {
+  assignmentRepository,
+  type CreateAssignmentData,
+  type UpdateAssignmentData,
+} from "../repositories/assignmentRepository";
+import { userRepository } from "../repositories/userRepository";
+
+async function getApplicationUser(clerkUserId: string) {
+  return userRepository.findOrCreateByClerkId(clerkUserId);
+}
 
 export const assignmentService = {
-  getAll() {
-    return prisma.assignment.findMany();
+  async getAll(clerkUserId: string) {
+    const user = await getApplicationUser(clerkUserId);
+    return assignmentRepository.getAllForUser(user.id);
   },
 
-  create(data: {
-    title: string;
-    course: string;
-    priority: string;
-    dueDate: string;
-    completed: boolean;
-  }) {
-
-    return prisma.assignment.create({
-      data,
-    });
+  async create(
+    clerkUserId: string,
+    data: CreateAssignmentData
+  ) {
+    const user = await getApplicationUser(clerkUserId);
+    return assignmentRepository.createForUser(user.id, data);
   },
 
-  update(id: number, data: {
-    title?: string;
-    course?: string;
-    priority?: string;
-    dueDate?: string;
-    completed?: boolean;
-  }) {
+  async update(
+    id: number,
+    clerkUserId: string,
+    data: UpdateAssignmentData
+  ) {
 
-    return prisma.assignment.update({
-      where: { id },
-      data,
-    });
+    const user = await getApplicationUser(clerkUserId);
+    return assignmentRepository.updateForUser(
+      id,
+    user.id,
+      data
+    );
   },
 
-  remove(id: number) {
-    return prisma.assignment.delete({
-      where: { id },
-    });
+  async remove(
+    id: number,
+    clerkUserId: string
+  ) {
+
+    const user = await getApplicationUser(clerkUserId);
+    return assignmentRepository.deleteForUser(
+      id,
+user.id
+    );
   },
 };
  

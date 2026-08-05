@@ -1,13 +1,19 @@
 import { prisma } from "../prisma";
 
-export async function findOrCreateUser(clerkUserId: string) {
-  return prisma.user.upsert({
-    where: {
-      clerkUserId,
-    },
-    update: {},
-    create: {
-      clerkUserId,
-    },
-  });
-}
+export const userRepository = {
+ async findOrCreateByClerkId(clerkUserId: string) {
+   const existingUser = await prisma.user.findUnique({
+     where: {
+       clerkUserId,
+     },
+   });
+   if (existingUser) {
+     return existingUser;
+   }
+   return prisma.user.create({
+     data: {
+       clerkUserId,
+     },
+   });
+ },
+};
