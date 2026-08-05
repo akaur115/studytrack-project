@@ -81,4 +81,29 @@
   background: white;
   color: #202438;
 }
+
+.authentication-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.login-button,
+.register-button {
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.login-button {
+  background: transparent;
+  border: 1px solid currentColor;
+  color: white;
+}
+
+.register-button {
+  border: none;
+  background: #2563eb;
+  color: white;
+}
  

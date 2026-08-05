@@ -17,9 +17,11 @@ function Layout() {
     createElement(
       "header",
       { className: "site-header" },
+
       createElement(
         "div",
         { className: "site-brand" },
+
         createElement("h1", null, "StudyTrack"),
 
         createElement(
@@ -39,32 +41,59 @@ function Layout() {
             className: "site-nav",
             "aria-label": "Main navigation",
           },
-          createElement(NavLink, { to: "/" }, "Home"),
 
           createElement(
             NavLink,
-            { to: "/assignments" },
+            {
+              to: "/",
+              end: true,
+            },
+            "Home"
+          ),
+
+          createElement(
+            NavLink,
+            {
+              to: "/assignments",
+            },
             "Assignments"
           ),
 
-          createElement(NavLink, { to: "/resources" }, "Resources"),
-          createElement(NavLink, { to: "/progress" }, "Progress")
+          createElement(
+            NavLink,
+            {
+              to: "/resources",
+            },
+            "Resources"
+          ),
+
+          createElement(
+            NavLink,
+            {
+              to: "/progress",
+            },
+            "Progress"
+          )
         ),
 
         createElement(
           "div",
-          { className: "auth-controls" },
+          { className: "authentication-actions" },
 
           createElement(
             SignedOut,
             null,
+
             createElement(
               SignInButton,
               { mode: "modal" },
 
               createElement(
                 "button",
-                { type: "button", className: "auth-button" },
+                {
+                  type: "button",
+                  className: "login-button",
+                },
                 "Log In"
               )
             ),
@@ -72,9 +101,13 @@ function Layout() {
             createElement(
               SignUpButton,
               { mode: "modal" },
+
               createElement(
                 "button",
-                { type: "button", className: "auth-button" },
+                {
+                  type: "button",
+                  className: "register-button",
+                },
                 "Register"
               )
             )
@@ -83,7 +116,9 @@ function Layout() {
           createElement(
             SignedIn,
             null,
-            createElement(UserButton)
+            createElement(UserButton, {
+              afterSignOutUrl: "/",
+            })
           )
         )
       )
@@ -109,4 +144,3 @@ function Layout() {
 }
 
 export default Layout;
- 
