@@ -1,6 +1,10 @@
 import type { ProgressTask } from "../types/ProgressTask";
 
-const API_URL = "/api/progress-tasks";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "";
+
+const API_URL =
+  `${API_BASE_URL}/api/progress-tasks`;
 
 function getAuthHeaders(token: string) {
   return {
@@ -15,6 +19,26 @@ function getJsonAuthHeaders(token: string) {
   };
 }
 
+async function getErrorMessage(
+  response: Response
+): Promise<string> {
+  try {
+    const data = await response.json();
+
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "message" in data
+    ) {
+      return String(data.message);
+    }
+  } catch {
+    // Response did not contain JSON.
+  }
+
+  return `Request failed with status ${response.status}.`;
+}
+
 export const progressTaskRepository = {
   async getAll(token: string): Promise<ProgressTask[]> {
     const response = await fetch(API_URL, {
@@ -22,9 +46,7 @@ export const progressTaskRepository = {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Unable to load progress tasks. Status: ${response.status}`
-      );
+      throw new Error(await getErrorMessage(response));
     }
 
     return response.json();
@@ -41,9 +63,7 @@ export const progressTaskRepository = {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Unable to create the progress task. Status: ${response.status}`
-      );
+      throw new Error(await getErrorMessage(response));
     }
 
     return response.json();
@@ -53,30 +73,32 @@ export const progressTaskRepository = {
     id: number,
     token: string
   ): Promise<ProgressTask> {
-    const response = await fetch(`${API_URL}/${id}/done`, {
-      method: "PATCH",
-      headers: getAuthHeaders(token),
-    });
+    const response = await fetch(
+      `${API_URL}/${id}/done`,
+      {
+        method: "PATCH",
+        headers: getAuthHeaders(token),
+      }
+    );
 
     if (!response.ok) {
-      throw new Error(
-        `Unable to mark the progress task as done. Status: ${response.status}`
-      );
+      throw new Error(await getErrorMessage(response));
     }
 
     return response.json();
   },
 
-  async delete(id: number, token: string): Promise<void> {
+  async delete(
+    id: number,
+    token: string
+  ): Promise<void> {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
       headers: getAuthHeaders(token),
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Unable to delete the progress task. Status: ${response.status}`
-      );
+      throw new Error(await getErrorMessage(response));
     }
   },
 };
