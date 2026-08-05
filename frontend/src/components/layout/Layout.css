@@ -52,3 +52,33 @@
   text-align: center;
   color: #374151;
 }
+
+.navigation-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.auth-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-button {
+  padding: 9px 16px;
+  border: 1px solid white;
+  border-radius: 20px;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font: inherit;
+}
+
+.auth-button:hover {
+  background: white;
+  color: #202438;
+}
+ 
