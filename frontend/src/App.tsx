@@ -7,6 +7,7 @@ import HomePage from "./pages/home/HomePage";
 import AssignmentsPage from "./pages/assignments/AssignmentPage";
 import ResourcesPage from "./pages/resources/ResourcesPage";
 import ProgressPage from "./pages/progress/ProgressPage";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 function App() {
   const [teamPoints, setTeamPoints] = useState(0);
@@ -45,6 +46,8 @@ function App() {
             />
           }
         />
+
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
     </Routes>
   );

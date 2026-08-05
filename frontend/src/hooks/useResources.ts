@@ -1,4 +1,6 @@
+import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
+
 import { resourceRepository } from "../repositories/resourceRepository";
 import { resourceService } from "../services/resourceService";
 import type {
@@ -7,12 +9,14 @@ import type {
 } from "../types/StudyResource";
 
 export function useResources() {
+  const { getToken } = useAuth();
+
   const [resources, setResources] = useState<StudyResource[]>([]);
 
   const [categoryFilter, setCategoryFilter] =
     useState<ResourceCategory | "All">("All");
 
-  // Load resources from backend when page opens
+  // Guests and logged-in users can view resources.
   useEffect(() => {
     async function loadResources() {
       const data = await resourceRepository.getAll();
@@ -39,26 +43,41 @@ export function useResources() {
       return false;
     }
 
-    const newResource = await resourceRepository.create({
-      name,
-      category,
-      source,
-    });
+    const token = await getToken();
+
+    if (!token) {
+      return false;
+    }
+
+    const newResource = await resourceRepository.create(
+      {
+        name,
+        category,
+        source,
+      },
+      token
+    );
 
     setResources((current) => [...current, newResource]);
 
     return true;
   }
 
-  async function removeResource(id: number) {
-    await resourceRepository.delete(id);
+  async function removeResource(id: number): Promise<void> {
+    const token = await getToken();
+
+    if (!token) {
+      return;
+    }
+
+    await resourceRepository.delete(id, token);
 
     setResources((current) =>
       current.filter((resource) => resource.id !== id)
     );
   }
 
-  async function toggleSavedResource(id: number) {
+  async function toggleSavedResource(id: number): Promise<void> {
     const selectedResource = resources.find(
       (resource) => resource.id === id
     );
@@ -67,11 +86,19 @@ export function useResources() {
       return;
     }
 
-    const updatedResource = resourceService.toggleSaved(selectedResource);
+    const token = await getToken();
+
+    if (!token) {
+      return;
+    }
+
+    const updatedResource =
+      resourceService.toggleSaved(selectedResource);
 
     const savedResource = await resourceRepository.update(
       id,
-      updatedResource
+      updatedResource,
+      token
     );
 
     setResources((current) =>
@@ -80,33 +107,6 @@ export function useResources() {
       )
     );
   }
-
-  /*
-  useResources manages the resource data used by the Resources page.
-
-  Purpose:
-  - Loads resources from the repository, which communicates with the backend API.
-  - Handles adding, deleting, and updating resources.
-  - Keeps filtering and dashboard calculations in the frontend.
-
-  Architecture:
-  ResourcesPage
-      ↓
-  useResources hook
-      ↓
-  resourceRepository
-      ↓
-  Backend API
-      ↓
-  Prisma database
-
-  Returned values:
-  - resources: complete resource list from database
-  - visibleResources: resources after applying category filter
-  - categoryFilter/setCategoryFilter: controls filtering
-  - savedCount/videoCount: dashboard statistics
-  - addResource/removeResource/toggleSavedResource: resource actions
-*/
 
   return {
     resources,

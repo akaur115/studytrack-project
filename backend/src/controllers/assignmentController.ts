@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { assignmentService } from "../services/assignmentService.js";
+import { assignmentService } from "../services/assignmentService";
 export async function getAssignments(_req: Request, res: Response) {
  const assignments = await assignmentService.getAll();
  res.json(assignments);
