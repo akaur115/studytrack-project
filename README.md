@@ -10,34 +10,59 @@
 - Arshpreet
 - Jaspreet
 
-## Project General Description
+## Project Description
 
-StudyTrack is a student planning app. The purpose of the app is to help students organize assignments, study resources, and group project progress in one place.
+StudyTrack is a full-stack student planning application that helps students organize assignments, save study resources, and track group-project progress.
 
-We chose this idea because students usually have many due dates, notes, and group tasks to manage. StudyTrack gives users a simple place to keep track of school work.
+The application uses:
 
-## High-Level User Stories
+- React and TypeScript for the frontend
+- Express and TypeScript for the backend
+- PostgreSQL and Prisma for data storage
+- Clerk for user authentication and session management
+- Docker for the local PostgreSQL database
 
-### User Story 1
+## Main Features
 
-As a student, I want to view my assignments, so that I can keep track of what work I still need to finish.
+- View and manage assignments
+- Save and filter study resources
+- Track team progress
+- Register and sign in using Clerk
+- Store application users using their Clerk user ID
+- Allow guests to view resources
+- Restrict resource creation, updates, and deletion to signed-in users
+- Save data persistently in PostgreSQL
 
-### User Story 2
+# Local Setup
 
-As a student, I want to save study resources, so that I can easily find helpful notes and links later.
+## Prerequisites
 
-### User Story 3
+Install the following:
 
-As a group member, I want to view team progress, so that I know what has been completed and what still needs work.
+- Node.js and npm
+- Docker Desktop
+- Git
+- A Clerk development application
 
-## Sprint 1 Features
+## Install Dependencies
 
-- React TypeScript project created with Vite
-- Main app layout created
-- Header with project title added
-- Footer with team member names added
-- Assignment List component added
-- Study Resources component added
-- Team Progress component added
+From the main project folder, run:
 
-## Sprint 1 deployment prepared on vercel
+```bash
+npm install
+
+## 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd studytrack-project
+
+## Backend Environment Variables
+
+Create a file named `backend/.env` and add:
+
+```env
+DATABASE_URL="postgresql://studytrack_user:studytrack_password@localhost:5433/studytrack_db"
+CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key
+CLERK_SECRET_KEY=sk_test_your_secret_key
+PORT=3000
