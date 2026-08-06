@@ -8,6 +8,9 @@ import {
 } from "@clerk/clerk-react";
 import { useState } from "react";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
+
 type AppUser = {
   id: number;
   clerkUserId: string;
@@ -36,7 +39,7 @@ function SignedInProfile() {
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/users/me",
+        `${API_URL}/users/me`,
         {
           method: "POST",
           headers: {

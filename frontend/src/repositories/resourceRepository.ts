@@ -1,10 +1,11 @@
 import type { StudyResource } from "../types/StudyResource";
 
-const API_URL = "http://localhost:3000/api/resources";
+const API_URL =
+  import.meta.env.VITE_API_URL ?? "http://localhost:3000/api";
 
 export const resourceRepository = {
   async getAll(): Promise<StudyResource[]> {
-    const response = await fetch(API_URL);
+    const response = await fetch(`${API_URL}/resources`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch resources");
@@ -21,7 +22,7 @@ export const resourceRepository = {
     },
     token: string
   ): Promise<StudyResource> {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_URL}/resources`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +43,7 @@ export const resourceRepository = {
     resource: StudyResource,
     token: string
   ): Promise<StudyResource> {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/resources/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +60,7 @@ export const resourceRepository = {
   },
 
   async delete(id: number, token: string): Promise<void> {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${API_URL}/resources/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
