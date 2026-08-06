@@ -1,4 +1,9 @@
-import { Router, type Request, type Response, type NextFunction } from "express";
+import {
+  Router,
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 import { getAuth } from "@clerk/express";
 
 import {
@@ -19,7 +24,7 @@ function requireSignedInUser(
 
   if (!isAuthenticated || !userId) {
     res.status(401).json({
-      message: "You must be logged in to manage progress tasks.",
+      message: "You must be logged in.",
     });
     return;
   }

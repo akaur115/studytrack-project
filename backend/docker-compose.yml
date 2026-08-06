@@ -1,16 +1,16 @@
 services:
-  studytrack-db:
+  postgres:
     image: postgres:16
-    container_name: studytrack-db
-    restart: always
+    container_name: studytrack-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: studytrack_user
-      POSTGRES_PASSWORD: studytrack_password
-      POSTGRES_DB: studytrack_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: studytrack
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
-      - studytrack_pgdata:/var/lib/postgresql/data
+      - studytrack_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  studytrack_pgdata:
+  studytrack_postgres_data:

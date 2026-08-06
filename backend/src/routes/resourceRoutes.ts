@@ -2,14 +2,11 @@ import { Router } from "express";
 import { resourceController } from "../controllers/resourceController";
 import { validateResource } from "../middleware/validateResource";
 
-const router = Router();
+export const resourceRoutes = Router();
 
-router.get("/", resourceController.getResources);
+resourceRoutes.get("/", resourceController.getResources);
+resourceRoutes.post("/", validateResource, resourceController.createResource);
+resourceRoutes.put("/:id", validateResource, resourceController.updateResource);
+resourceRoutes.delete("/:id", resourceController.deleteResource);
 
-router.post("/", validateResource, resourceController.createResource);
-
-router.put("/:id", validateResource, resourceController.updateResource);
-
-router.delete("/:id", resourceController.deleteResource);
-
-export default router;
+export default resourceRoutes;

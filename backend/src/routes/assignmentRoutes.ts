@@ -1,17 +1,15 @@
-import express from "express";
+import { Router } from "express";
+
 import {
   createAssignment,
   deleteAssignment,
   getAssignments,
   updateAssignment,
-} from "../controllers/assignmentController.js";
-import { validateAssignment } from "../middleware/validateAssignment.js";
+} from "../controllers/assignmentController";
 
-const router = express.Router();
+export const assignmentRoutes = Router();
 
-router.get("/", getAssignments);
-router.post("/", validateAssignment, createAssignment);
-router.patch("/:id", updateAssignment);
-router.delete("/:id", deleteAssignment);
-
-export default router;
+assignmentRoutes.get("/", getAssignments);
+assignmentRoutes.post("/", createAssignment);
+assignmentRoutes.patch("/:id", updateAssignment);
+assignmentRoutes.delete("/:id", deleteAssignment);

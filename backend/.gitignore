@@ -1,11 +1,15 @@
+# Dependencies
 node_modules/
-dist/
+**/node_modules/
 
-# Environment variables
+# Environment files
 .env
+**/.env
 
-# Prisma generated files
-/src/generated/prisma
+# Build folders
+dist/
+**/dist/
 
-# Local database
-prisma/dev.db
+# Prisma
+backend/prisma/dev.db
+backend/prisma/migrations-sqlite-backup/
